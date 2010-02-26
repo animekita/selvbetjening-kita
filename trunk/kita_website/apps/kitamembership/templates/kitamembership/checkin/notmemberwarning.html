@@ -1,0 +1,12 @@
+{% load kitamembership_membership %}
+
+{% include "kitamembership/checkin/ismember.html" %}
+
+<fieldset class="module aligned " style="border-color: red; border-width: 4px;">
+<div class="form-row type  ">
+<div>
+      <h3>Denne bruger er ikke medlem af foreningen!</h3>
+      <p><b>Gå til <a href="{% url admin:events_attend_selections_change attendee.id %}">ændre tilvalg</a> og vælg et medlemskab.</b></p>
+</div>
+</div>
+</fieldset>

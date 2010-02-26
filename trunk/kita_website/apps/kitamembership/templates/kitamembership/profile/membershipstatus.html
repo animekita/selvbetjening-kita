@@ -1,0 +1,23 @@
+{% extends "site.html" %}
+
+{% block contenthead %}Medlemskab af Anime Kita{% endblock %}
+
+{% block content %}
+{% ifnotequal membership_status "INACTIVE" %}
+
+<h3>Medlemsstatus</h3>
+{% ifequal membership_status "ACTIVE" %}
+<p>Du har betalt kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
+{% endifequal %}
+
+{% ifequal membership_status "CONDITIONAL_ACTIVE" %}
+<p>Du har betalt første halvdel af dit kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
+{% endifequal %}
+
+{% ifequal membership_status "PASSIVE" %}
+<p>Du har ikke fornyet dit kontingent, du vil derfor blive regnet som passivt medlem indtil den {{membership_passive_to|date:"d/m Y"}}.</p>
+{% endifequal %}
+
+{% endifnotequal %}
+
+{% endblock %}
