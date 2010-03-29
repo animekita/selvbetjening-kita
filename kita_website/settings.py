@@ -32,6 +32,7 @@ INSTALLED_APPS.extend([
 
     'selvbetjening.notify',
     'selvbetjening.notify.concrete5',
+    'selvbetjening.notify.proftpd',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.eventlogger',

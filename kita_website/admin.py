@@ -30,5 +30,6 @@ import selvbetjening.data.events.admin
 import selvbetjening.data.invoice.admin
 import selvbetjening.clients.mailcenter.admin
 import selvbetjening.notify.concrete5.admin
+import selvbetjening.notify.proftpd.admin
 
 import kita_website.apps.kitamembership.admin
