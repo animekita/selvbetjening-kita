@@ -3,8 +3,6 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from kita_website.apps.kitamembership.models import *
 
-from tinymce.models import HTMLField
-
 class Migration:
 
     no_dry_run = True
@@ -72,12 +70,12 @@ class Migration:
 
     models = {
         'events.event': {
-            'change_confirmation': ('HTMLField', [], {'blank': 'True'}),
-            'description': ('HTMLField', ["_(u'description')"], {'blank': 'True'}),
+            'change_confirmation': ('models.TextField', [], {'blank': 'True'}),
+            'description': ('models.TextField', ["_(u'description')"], {'blank': 'True'}),
             'enddate': ('models.DateField', ["_(u'end date')"], {'null': 'True', 'blank': 'True'}),
             'id': ('models.AutoField', [], {'primary_key': 'True'}),
             'maximum_attendees': ('models.IntegerField', ["_('Maximum attendees')"], {'default': '0'}),
-            'registration_confirmation': ('HTMLField', [], {'blank': 'True'}),
+            'registration_confirmation': ('models.TextField', [], {'blank': 'True'}),
             'registration_open': ('models.BooleanField', ["_(u'registration open')"], {}),
             'show_change_confirmation': ('models.BooleanField', [], {'default': 'False'}),
             'show_registration_confirmation': ('models.BooleanField', [], {'default': 'False'}),
