@@ -1,5 +1,7 @@
-{% load uniform %}
+{% load uni_form_tags %}
 
 <h2>Medlemskab</h2>
 
-{{form|uniform_add}}
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}

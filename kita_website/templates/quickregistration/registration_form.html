@@ -1,9 +1,8 @@
 {% extends "site.html" %}
-
-{% load uniform %}
+{% load uni_form_tags %}
 
 {% block extraheader %}
-    {% uniform_header %}
+{% include "form_includes.html" %}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -17,6 +16,8 @@
 
 <p>Du kan læse mere <a href="http://beta.anime-kita.dk/databehandlingspolitik/">her</a> om hvordan vi behandler de oplysninger du vidergiver til os.</p>
 
-{{ form|uniform:"opret bruger" }}
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}
 
 {% endblock %}
