@@ -4,23 +4,23 @@ from django.db import models
 from kita_website.apps.kitamembership.models import *
 
 class Migration:
-    
+
     def forwards(self, orm):
-        
+
         # Adding field 'Membership.invoice'
-        db.add_column('kitamembership_membership', 'invoice', models.ForeignKey(orm['invoice.Invoice'], blank=True))
-        
+        db.add_column('kitamembership_membership', 'invoice', models.ForeignKey(orm['invoice.Invoice'], blank=True, default=0))
+
         # Adding field 'Membership.event'
         db.add_column('kitamembership_membership', 'event', models.ForeignKey(orm['events.Event'], null=True, blank=True))
-        
+
     def backwards(self, orm):
-        
+
         # Deleting field 'Membership.invoice'
         db.delete_column('kitamembership_membership', 'invoice_id')
-        
+
         # Deleting field 'Membership.event'
         db.delete_column('kitamembership_membership', 'event_id')
-        
+
     models = {
         'kitamembership.membership': {
             'bind_date': ('models.DateTimeField', [], {}),
@@ -48,5 +48,5 @@ class Migration:
             'id': ('models.AutoField', [], {'primary_key': 'True'})
         }
     }
-    
+
     complete_apps = ['kitamembership']
