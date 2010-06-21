@@ -27,7 +27,7 @@
 			<div id="topUserNav">
 				<!-- This is why whitespaces inside block elements shouldn't be parsed -->
 				{% if user.is_authenticated %}
-				<a class="floatLeft" href="{% url members_profile %}">{{user}}</a
+				<a class="floatLeft" href="{% url members_profile %}">se din profil</a
 				><span class="vertSeperatorTiny">|</span
 				><a href="{% url members_logout %}">Log ud</a>
 				{% else %}
@@ -43,14 +43,30 @@
 
 		<div id="mid">
 			<div id="midLeft">
-				<h2>Din bruger</h2>
 				{% block navigation %}
+
+				{% if user.is_authenticated %}
+				<h2>Din bruger</h2>
 				<ul class="leftNav">
 					<li><a href="{% url members_profile %}">Profil</a></li>
-					<li><a href="{% url members_password_change %}">Ændre kodeord</a></li>
-					<li><a href="{% url kita_membership %}">Medlemskab</a></li>
+					<li><a href="{% url kita_membership %}">Medlemstatus</a></li>
 					<li><a href="{% url members_current_events %}">Arrangementer</a></li>
 				</ul>
+
+				<h2>Opdater</h2>
+				<ul class="leftNav">
+					<li><a href="{% url members_editprofile %}">Personoplysninger</a></li>
+					<li><a href="#">Privacy</a></li>
+					<li><a href="#">Billede</a></li>
+					<li><a href="{% url members_password_change %}">Kodeord</a></li>
+				</ul>
+				{% else %}
+				<ul class="leftNav">
+					<li><a href="{% url quickregistration_register %}"></a></li>
+				</ul>
+				{% endif %}
+
+
 				{% endblock %}
 
 				<div id="kitaKanji"></div>
@@ -60,14 +76,12 @@
 				<h1 class="title">{% block contenthead %}{% endblock %}</h1>
 
 				{% if messages or session_message %}
-				<ul id="messages">
 					{% for message in messages %}
-					<li>{{ message }}</li>
+					<p class="notice">{{ message }}</p>
 					{% endfor %}
 					{% if session_message %}
-					<li>{{session_message}}</li>
+					<p class="notice">{{session_message}}</p>
 					{% endif %}
-				</ul>
 				{% endif %}
 
 				{% block content %}{% endblock %}

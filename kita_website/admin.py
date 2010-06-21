@@ -20,7 +20,7 @@ class UserAdmin(UserAdminExt):
 
     list_display = UserAdminExt.list_display + (membership_status,)
 
-    inlines = [UserProfileInline, MembershipInline]
+    inlines = UserAdminExt.inlines + [MembershipInline,]
 
 site.replace(User, UserAdmin)
 
