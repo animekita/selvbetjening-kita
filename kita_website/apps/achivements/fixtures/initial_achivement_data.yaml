@@ -1,0 +1,15 @@
+- model: achivements.achivementgroup
+  pk: general
+  fields:
+    name: Overordnet
+
+- model: achivements.achivementgroup
+  pk: events
+  fields:
+    name: Arrangementer
+
+- model: achivements.achivement
+  pk: member_of_kita
+  fields:
+    group: general
+    name: Medlem af Anime Kita

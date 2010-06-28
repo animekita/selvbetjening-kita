@@ -1,0 +1,25 @@
+<div id="profile-achivements">
+
+<h2>Achivements</h2>
+
+<p>Du har <img src="{{MEDIA_URL}}graphics/icons/medal_gold_3.png" /> x {{awards.count}} achivements. <a href="{% url kita_list_achivements %}">Se alle achivements</a>.</p>
+
+{% for award in awards %}
+
+{% if not award.achivement.group.slug == 'general' %}
+    {% ifchanged award.achivement.group %}
+        <h3>{{award.achivement.group.name}}</h3>
+    {% endifchanged %}
+{% endif %}
+
+<div class="profile-achivement">
+    <img src="{{MEDIA_URL}}graphics/icons/medal_gold_3.png" />{{award.achivement.name}}
+
+    <span class="profile-achivement-comment">
+    {% if award.note %}({{award.note}}){% endif %}
+    </span>
+</div>
+
+{% endfor %}
+
+</div>

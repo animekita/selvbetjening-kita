@@ -36,6 +36,7 @@ INSTALLED_APPS.extend([
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.eventlogger',
+    'kita_website.apps.achivements',
 ])
 
 # other instance settings

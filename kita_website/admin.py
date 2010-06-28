@@ -32,3 +32,4 @@ import selvbetjening.clients.mailcenter.admin
 import selvbetjening.notify.concrete5.admin
 
 import kita_website.apps.kitamembership.admin
+import kita_website.apps.achivements.admin

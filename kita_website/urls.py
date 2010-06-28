@@ -5,12 +5,15 @@ from django.views.generic.simple import redirect_to, direct_to_template
 from selvbetjening.clients.profile.views import profile_redirect
 
 from kita_website.apps.kitamembership.views import profile_membershipstatus
+from kita_website.apps.achivements.views import list_achivements
 from kita_website import admin
 
 urlpatterns = patterns('',
     url(r'^$', profile_redirect, name='home'),
 
+
     url(r'^profil/medlemskab/', profile_membershipstatus, name='kita_membership'),
+    url(r'^profil/achivements/', list_achivements, name='kita_list_achivements'),
     (r'^profil/', include('selvbetjening.clients.profile.urls')),
 
     (r'^bliv-medlem/', include('selvbetjening.clients.quickregistration.urls')),
