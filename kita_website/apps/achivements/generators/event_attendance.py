@@ -49,7 +49,7 @@ def event_changed_handler(sender, **kwargs):
     created = kwargs['created']
 
     if created:
-        group = AchivementGroup.objects.get(slug=AchivementGroup.EVENTS)
+        group = AchivementGroup.Default.events()
 
         achivement = Achivement.objects.create(name=event.title,
                                                slug=slugify(event.title),

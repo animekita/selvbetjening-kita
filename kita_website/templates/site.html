@@ -49,14 +49,14 @@
 				<h2>Din bruger</h2>
 				<ul class="leftNav">
 					<li><a href="{% url members_profile %}">Profil</a></li>
-					<li><a href="{% url kita_membership %}">Medlemstatus</a></li>
+					<li><a href="{% url kita_membership %}">Kontingent</a></li>
 					<li><a href="{% url members_current_events %}">Arrangementer</a></li>
 				</ul>
 
 				<h2>Opdater</h2>
 				<ul class="leftNav">
 					<li><a href="{% url members_editprofile %}">Personoplysninger</a></li>
-					<li><a href="#">Privacy</a></li>
+					<li><a href="{% url members_editprivacy %}">Privacy</a></li>
 					<li><a href="{% url members_editpicture %}">Billede</a></li>
 					<li><a href="{% url members_password_change %}">Kodeord</a></li>
 				</ul>

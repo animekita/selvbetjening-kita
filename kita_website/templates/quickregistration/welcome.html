@@ -1,0 +1,18 @@
+{% extends "site.html" %}
+
+{% block breadcrumbs %}
+<li><a href="{% url quickregistration_register %}">opret bruger</a>&nbsp;&gt;&nbsp;</li>
+<li><a href="{% url quickregistration_complete %}">velkommen</a></li>
+{% endblock %}
+
+{% block contenthead %}Tak for din tilmelding{% endblock %}
+
+{% block content %}
+
+<p>Din selvbetjening bruger er nu oprettet!</p>
+
+<p>Du kan nu <a href="{% url members_login %}">logge ind</a> på selvbetjening for at <a href="{% url members_profile %}">se din profil</a> og <a href="{% url eventregistration_view_all %}">tilmelde dig vores arrangementer</a>.</p>
+
+<p>Du kan også besøge vores <a href="http://www.anime-kita.dk/forum/">forum</a> og møde andre medlemmer i foreningen. Du skal bruge det samme brugernavn og kodeord til forummet som til selvbetjening.</p>
+
+{% endblock %}

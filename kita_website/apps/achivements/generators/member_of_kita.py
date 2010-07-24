@@ -12,7 +12,7 @@ def user_created_handler(sender, **kwargs):
     created = kwargs['created']
 
     if created:
-        achivement = Achivement.objects.get(pk=Achivement.MEMBER_OF_KITA)
+        achivement = Achivement.Default.member_of_kita()
 
         Award.objects.create(achivement=achivement,
                              user=user,

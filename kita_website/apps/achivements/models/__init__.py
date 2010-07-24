@@ -1,5 +1,5 @@
-
 from achivements import AchivementGroup, Achivement, Award
+from privacy import Privacy
 
 from kita_website.apps.achivements.generators.event_attendance import\
      EventAttendanceAchivement

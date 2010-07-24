@@ -1,23 +1,31 @@
 {% extends "site.html" %}
 
-{% block contenthead %}Medlemskab af Anime Kita{% endblock %}
+{% block contenthead %}Dit medlemskab af foreningen{% endblock %}
 
 {% block content %}
-{% ifnotequal membership_status "INACTIVE" %}
 
-<h3>Medlemsstatus</h3>
 {% ifequal membership_status "ACTIVE" %}
-<p>Du har betalt kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
+<p>Du er <b>aktivt medlem</b> af Anime Kita, hvilket giver dig fuld adgang til foreningens arrangementer, store som små.</p>
+
+<p>Du betalte kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
 {% endifequal %}
 
 {% ifequal membership_status "CONDITIONAL_ACTIVE" %}
-<p>Du har betalt første halvdel af dit kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
+<p>Du er <b>betinget medlem</b> af Anime Kita, hvilket betyder at du er medlem af foreningen men du har kun betalt første halvdel af dit kontingent. Derfor skal du betale anden halvdel af dit kontingent ved næste arrangement du deltager i.</p>
+
+<p>Du betalte første halvdel af dit kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
 {% endifequal %}
 
 {% ifequal membership_status "PASSIVE" %}
-<p>Du har ikke fornyet dit kontingent, du vil derfor blive regnet som passivt medlem indtil den {{membership_passive_to|date:"d/m Y"}}.</p>
+<p>Du er <b>passivt medlem</b> af Anime Kita, hvilket betyder at du ikke har fornyet dit kontingent efter det er udløbet og derfor skal betale kontingent igen til det næste arrangement du deltager i. Du vil dog stadig blive regnet som medlem af foreningen i vores statistikker.</p>
+
+<p>Du vil være passivt medlem indtil den {{membership_passive_to|date:"d/m Y"}} hvor du ikke længere vil blive betegnet som medlem af foreningen.</p>
 {% endifequal %}
 
-{% endifnotequal %}
+{% ifequal membership_status "INACTIVE" %}
+<p>Du er <b>ikke medlem</b> af Anime Kita, hvilket skyldes at du ikke har betalt kontingent til foreningen.</p>
+
+<p>Du skal være medlem af foreningen for at kunne deltage i vores arrangementer. Hvis andet ikke er anført så vil det være muligt at betale kontingent til selve arrangementet.</p>
+{% endifequal %}
 
 {% endblock %}

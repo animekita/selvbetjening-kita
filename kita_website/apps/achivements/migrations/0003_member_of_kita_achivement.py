@@ -9,7 +9,8 @@ from kita_website.apps.achivements.models import Achivement
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        achivement = orm.Achivement.objects.get(slug=Achivement.MEMBER_OF_KITA)
+        achivement = Achivement.Default.member_of_kita(orm=orm.Achivement,
+                                                       group_orm=orm.AchivementGroup)
 
         for user in orm['auth.User'].objects.all():
             orm.Award.objects.create(achivement=achivement,

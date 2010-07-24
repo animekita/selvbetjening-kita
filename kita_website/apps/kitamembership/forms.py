@@ -1,10 +1,23 @@
+# encoding: utf-8
+
 from django import forms
 from django.utils.translation import ugettext as _
+
+from uni_form.helpers import FormHelper, Layout
+
+from selvbetjening.viewhelpers.forms.helpers import InlineFieldset
 
 import models
 
 class MembershipForm(forms.Form):
     type = forms.ChoiceField(label=_('Payment type'))
+
+    layout = Layout(InlineFieldset(u'Medlemskab', 'type',
+                                   help_text=u'For at deltage i dette arrangement skal du betale kontingent. <a href="http://www.anime-kita.dk/bliv-medlem/">Du kan læse mere om vores kontingent og forskellen på fuldt kontingent og første/anden rate betalinger her</a>.'))
+
+    helper = FormHelper()
+    helper.add_layout(layout)
+    helper.form_tag = False
 
     def __init__(self, *args, **kwargs):
         self.attendee = kwargs.pop('attendee', None)

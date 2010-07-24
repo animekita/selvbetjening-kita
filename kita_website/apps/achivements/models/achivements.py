@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class AchivementGroup(models.Model):
-    EVENTS = 'events'
-    GENERAL = 'general'
-
     slug = models.SlugField(primary_key=True)
 
     name = models.CharField(max_length=255)
@@ -15,9 +12,28 @@ class AchivementGroup(models.Model):
     class Meta:
         app_label = 'achivements'
 
-class Achivement(models.Model):
-    MEMBER_OF_KITA = 'member_of_kita'
+    class Default:
+        @staticmethod
+        def events(orm=None):
+            if orm is None:
+                orm = AchivementGroup
 
+            group, created = orm.objects.get_or_create(
+                slug='events', defaults={'name' : 'Arrangementer'})
+
+            return group
+
+        @staticmethod
+        def general(orm=None):
+            if orm is None:
+                orm = AchivementGroup
+
+            group, created = orm.objects.get_or_create(
+                slug='general', defaults={'name' : 'Overordnet'})
+
+            return group
+
+class Achivement(models.Model):
     slug = models.SlugField(primary_key=True)
 
     group = models.ForeignKey(AchivementGroup)
@@ -28,6 +44,18 @@ class Achivement(models.Model):
 
     class Meta:
         app_label = 'achivements'
+
+    class Default:
+        @staticmethod
+        def member_of_kita(orm=None, group_orm=None):
+            if orm is None:
+                orm = Achivement
+
+            achivement, created = orm.objects.get_or_create(
+                slug='member_of_kita', defaults={'name' : 'Medlem af Anime Kita',
+                                                 'group' : AchivementGroup.Default.general(group_orm)})
+
+            return achivement
 
 class Award(models.Model):
     achivement = models.ForeignKey(Achivement)
