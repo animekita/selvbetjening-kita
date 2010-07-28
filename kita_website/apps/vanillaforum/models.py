@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
 from selvbetjening.data.members.signals import user_created
-from selvbetjening.data.members.signals import user_changed_password
+from selvbetjening.data.members.signals import user_changed_password, user_changed_username
 
 class VanillaForum:
 
@@ -84,6 +84,14 @@ class VanillaForum:
         cursor.execute("UPDATE LUM_User SET Password=%s WHERE Name=%s", (passwd.hexdigest(), username))
         cursor.close()
 
+    def changeUserUsername(self, old_username, new_username):
+        import wingdbstub
+
+        cursor = self.db.cursor()
+        cursor.execute("UPDATE LUM_User SET Name=%s WHERE Name=%s",
+                       (new_username, old_username))
+        cursor.close()
+
     def getLatestStyleID(self):
         cursor = self.db.cursor()
         cursor.execute("SELECT StyleID FROM LUM_Style ORDER BY StyleID DESC LIMIT 1")
@@ -115,3 +123,13 @@ def change_user_password_listner(sender, **kwargs):
     vanilla_forum.changeUserPassword(instance.username, kwargs['clear_text_password'])
 
 user_changed_password.connect(change_user_password_listner)
+
+# listen for user changing their username
+def change_user_username_listener(sender, **kwargs):
+    old_username = kwargs['old_username']
+    new_username = kwargs['new_username']
+
+    vanilla_forum = VanillaForum()
+    vanilla_forum.changeUserUsername(old_username, new_username)
+
+user_changed_username.connect(change_user_username_listener)

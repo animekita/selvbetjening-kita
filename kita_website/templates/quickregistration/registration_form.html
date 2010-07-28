@@ -5,8 +5,10 @@
 {% include "form_includes.html" %}
 {% endblock %}
 
-{% block breadcrumbs %}
-<li><a href="{% url quickregistration_register %}">opret bruger</a></li>
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Opret bruger' 'quickregistration_register' %}
 {% endblock %}
 
 {% block contenthead %}Opret bruger{% endblock %}

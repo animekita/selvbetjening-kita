@@ -1,5 +1,11 @@
 {% extends "site.html" %}
 
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Alle achivements' 'kita_list_achivements' %}
+{% endblock %}
+
 {% block contenthead %}Achivements{% endblock %}
 
 {% block content %}

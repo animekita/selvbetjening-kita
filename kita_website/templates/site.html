@@ -39,7 +39,15 @@
 
 		</div>
 
-		<div id="pageControls"></div>
+		{% block breadcrumb %}
+			{% load breadcrumb_tags %}
+			{% add_crumb 'Selvbetjening' 'home' %}
+		{% endblock %}
+
+		<div id="topContent">
+			<div id="pageControls"></div>
+			{% render_breadcrumbs %}
+		</div>
 
 		<div id="mid">
 			<div id="midLeft">
@@ -58,6 +66,7 @@
 					<li><a href="{% url members_editprofile %}">Personoplysninger</a></li>
 					<li><a href="{% url members_editprivacy %}">Privacy</a></li>
 					<li><a href="{% url members_editpicture %}">Billede</a></li>
+					<li><a href="{% url members_username_change %}">Brugernavn</a></li>
 					<li><a href="{% url members_password_change %}">Kodeord</a></li>
 				</ul>
 				{% else %}
@@ -65,6 +74,7 @@
 					<li><a href="{% url quickregistration_register %}"></a></li>
 				</ul>
 				{% endif %}
+
 
 
 				{% endblock %}

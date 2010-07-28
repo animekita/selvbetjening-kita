@@ -1,8 +1,9 @@
-{% extends "site.html" %}
+{% extends "quickregistration/registration_form.html" %}
 
-{% block breadcrumbs %}
-<li><a href="{% url quickregistration_register %}">opret bruger</a>&nbsp;&gt;&nbsp;</li>
-<li><a href="{% url quickregistration_complete %}">velkommen</a></li>
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Velkommen' %}
 {% endblock %}
 
 {% block contenthead %}Tak for din tilmelding{% endblock %}

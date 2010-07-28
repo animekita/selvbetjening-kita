@@ -1,4 +1,10 @@
-{% extends "site.html" %}
+{% extends "profile/profile.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Dit medlemskab af foreningen' 'kita_membership' %}
+{% endblock %}
 
 {% block contenthead %}Dit medlemskab af foreningen{% endblock %}
 

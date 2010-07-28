@@ -1,0 +1,40 @@
+{% extends "site.html" %}
+
+{% block navigation %}
+
+{% if event %}
+<h2>Arrangement</h2>
+
+	<ul class="leftNav">
+		<li><a href="{% url eventregistration_information event.pk %}">Information</a></li>
+		<li><a href="{% url eventregistration_attendees event.pk %}">Tilmeldte</a></li>
+	</ul>
+
+
+{% if event.is_registration_open and event.is_registration_allowed and not is_attendee %}
+
+<h2>Din tilmelding</h2>
+	<ul class="leftNav">
+		<li><b><a href="{% url eventregistration_signup event.pk %}">Tilmeld dig</a></b></li>
+	</ul>
+
+{% endif %}
+
+{% if event.is_registration_open and is_attendee %}
+
+<h2>Din tilmelding</h2>
+	<ul class="leftNav">
+		<li><a href="{% url eventregistration_status event.pk %}">Tilmelding status</a></li>
+		{% if event.has_options %}
+		<li><a href="{% url eventregistration_change_options event.pk %}">Ændre tilmelding</a></li>
+		{% endif %}
+		<li><a href="{% url eventregistration_signoff event.pk %}">Fjern tilmelding</a></li>
+	</ul>
+
+{% endif %}
+
+{% else %}
+{{block.super}}
+{% endif %}
+
+{% endblock %}
