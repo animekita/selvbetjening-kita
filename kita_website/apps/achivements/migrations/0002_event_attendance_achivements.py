@@ -13,6 +13,10 @@ from kita_website.apps.achivements.models import AchivementGroup
 
 class Migration(DataMigration):
 
+    needed_by = (
+        ("events", "0020_rename_some_fields"),
+    )
+
     def forwards(self, orm):
         for event in orm['events.Event'].objects.all():
 
