@@ -85,8 +85,6 @@ class VanillaForum:
         cursor.close()
 
     def changeUserUsername(self, old_username, new_username):
-        import wingdbstub
-
         cursor = self.db.cursor()
         cursor.execute("UPDATE LUM_User SET Name=%s WHERE Name=%s",
                        (new_username, old_username))
