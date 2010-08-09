@@ -35,13 +35,9 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify.proftpd',
 
     'kita_website.apps.kitamembership',
-    'kita_website.apps.eventlogger',
     'kita_website.apps.achivements',
     'kita_website.apps.vanillaforum',
 ])
-
-# other instance settings
-AUDIT_FILE = '/tmp/selvaudit.log'
 
 # import localsettings, a per deployment configuration file
 try:
