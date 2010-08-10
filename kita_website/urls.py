@@ -13,7 +13,7 @@ urlpatterns = patterns('',
 
 
     url(r'^profil/medlemskab/', profile_membershipstatus, name='kita_membership'),
-    url(r'^profil/achivements/', list_achivements, name='kita_list_achivements'),
+    url(r'^profil/achievements/', list_achivements, name='kita_list_achivements'),
     (r'^profil/', include('selvbetjening.clients.profile.urls')),
 
     (r'^bliv-medlem/', include('selvbetjening.clients.quickregistration.urls')),
