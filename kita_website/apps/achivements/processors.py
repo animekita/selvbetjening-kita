@@ -41,10 +41,10 @@ class ExtendedPrivacyProcessor(object):
         self.privacy, created = Privacy.objects.get_or_create(user=self.user)
 
     def get_privacy_options(self):
-        return [('achivement', 'Achivement', self.privacy.public_achivements),]
+        return [('achievement', 'Achievement', self.privacy.public_achivements),]
 
     def save_privacy_options(self, options):
-        privacy_setting = bool(options.get('achivement', False))
+        privacy_setting = bool(options.get('achievement', False))
 
         self.privacy.public_achivements = privacy_setting
         self.privacy.save()
