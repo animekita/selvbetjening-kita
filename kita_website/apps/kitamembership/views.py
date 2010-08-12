@@ -1,8 +1,10 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 
 from models import Membership
 
+@login_required
 def profile_membershipstatus(request,
                              template='kitamembership/profile/membershipstatus.html'):
     data = {'membership_status' : Membership.objects.get_membership_state(request.user),
