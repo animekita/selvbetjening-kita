@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to, direct_to_template
 
 from selvbetjening.clients.profile.views import profile_redirect
+from selvbetjening.sadmin.base import sadmin
 
 from kita_website.apps.kitamembership.views import profile_membershipstatus
 from kita_website.apps.achivements.views import list_achivements
@@ -20,6 +21,7 @@ urlpatterns = patterns('',
     (r'^events/', include('selvbetjening.clients.eventregistration.urls')),
 
     (r'^admin/', include(admin.site.urls)),
+    (r'^sadmin/', include(sadmin.site.urls)),
 )
 
 if getattr(settings, 'STATIC_DEBUG', False):

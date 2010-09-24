@@ -34,6 +34,8 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify.concrete5',
     'selvbetjening.notify.proftpd',
 
+    'selvbetjening.sadmin.base',
+
     'kita_website.apps.kitamembership',
     'kita_website.apps.achivements',
     'kita_website.apps.vanillaforum',
