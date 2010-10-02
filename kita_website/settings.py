@@ -35,6 +35,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify.proftpd',
 
     'selvbetjening.sadmin.base',
+    'selvbetjening.sadmin.members',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achivements',
