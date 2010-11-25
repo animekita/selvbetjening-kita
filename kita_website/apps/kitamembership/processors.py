@@ -78,9 +78,7 @@ class ChangeSelectionProcessor(object):
                                      'existing_membership': self.existing_membership})
         else:
             return render_to_string('kitamembership/checkin/form.html',
-                                    {'adminform' : AdminForm(self.form,
-                                                             [(None, {'fields': self.form.base_fields.keys()})],
-                                                             {}),
+                                    {'form' : self.form,
                                      'attendee' : self.attendee,
                                      'previous_state': self.previous_state,
                                      })

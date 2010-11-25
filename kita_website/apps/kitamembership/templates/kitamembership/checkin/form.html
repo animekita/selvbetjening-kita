@@ -1,5 +1,6 @@
+{% load uni_form_tags %}
 {% include "kitamembership/checkin/ismember.html" %}
 
-{% for fieldset in adminform %}
-      {% include "admin/includes/fieldset.html" %}
-{% endfor %}
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}

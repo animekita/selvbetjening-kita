@@ -36,6 +36,7 @@ INSTALLED_APPS.extend([
 
     'selvbetjening.sadmin.base',
     'selvbetjening.sadmin.members',
+    'selvbetjening.sadmin.events',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achivements',
