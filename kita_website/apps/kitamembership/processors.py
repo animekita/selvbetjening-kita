@@ -1,9 +1,9 @@
 from django.template.loader import render_to_string
 from django.contrib.admin.helpers import AdminForm
 
-from selvbetjening.data.members.processor_handlers import user_migration_processors
-from selvbetjening.data.events.processor_handlers import change_selection_processors, checkin_processors
-from selvbetjening.clients.eventregistration.processor_handlers import signup_processors, change_processors
+from selvbetjening.core.members.processor_handlers import user_migration_processors
+from selvbetjening.core.events.processor_handlers import change_selection_processors, checkin_processors
+from selvbetjening.portal.eventregistration.processor_handlers import signup_processors, change_processors
 
 from forms import MembershipForm
 import models

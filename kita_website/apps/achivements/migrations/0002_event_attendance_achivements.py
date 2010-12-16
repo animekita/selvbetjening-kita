@@ -7,7 +7,7 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import slugify
 
-from selvbetjening.data.events.models import AttendState
+from selvbetjening.core.events.models import AttendState
 
 from kita_website.apps.achivements.models import AchivementGroup
 

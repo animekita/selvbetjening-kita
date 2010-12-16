@@ -5,8 +5,8 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
-from selvbetjening.data.members.signals import user_created
-from selvbetjening.data.members.signals import user_changed_password, user_changed_username
+from selvbetjening.core.members.signals import user_created
+from selvbetjening.core.members.signals import user_changed_password, user_changed_username
 
 class VanillaForum:
 

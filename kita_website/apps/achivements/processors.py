@@ -2,8 +2,8 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.contrib.admin.helpers import AdminForm
 
-from selvbetjening.clients.profile.models import UserPrivacy
-from selvbetjening.clients.profile.processor_handlers import profile_page_processors, \
+from selvbetjening.portal.profile.models import UserPrivacy
+from selvbetjening.portal.profile.processor_handlers import profile_page_processors, \
      extended_privacy_processors
 
 from models import Achivement, AchivementGroup, Award, Privacy

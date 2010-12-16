@@ -6,8 +6,8 @@ from django.contrib.auth import models as auth_models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from selvbetjening.data.invoice.tests import Database as InvoiceDatabase
-from selvbetjening.data.events.tests import Database as EventDatabase
+from selvbetjening.core.invoice.tests import Database as InvoiceDatabase
+from selvbetjening.core.events.tests import Database as EventDatabase
 
 from models import MembershipType, MembershipState, Membership, YearlyRate
 import forms

@@ -21,14 +21,13 @@ TEMPLATE_DIRS = [
 
 # installed applications
 INSTALLED_APPS.extend([
-    'selvbetjening.viewhelpers.forms',
-    'selvbetjening.viewhelpers.googleanalytics',
-    'selvbetjening.viewhelpers.copyright',
+    'selvbetjening.viewbase.forms',
+    'selvbetjening.viewbase.googleanalytics',
+    'selvbetjening.viewbase.copyright',
 
-    'selvbetjening.clients.quickregistration',
-    'selvbetjening.clients.mailcenter',
-    'selvbetjening.clients.profile',
-    'selvbetjening.clients.eventregistration',
+    'selvbetjening.portal.quickregistration',
+    'selvbetjening.portal.profile',
+    'selvbetjening.portal.eventregistration',
 
     'selvbetjening.notify',
     'selvbetjening.notify.concrete5',

@@ -2,7 +2,7 @@ from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save, post_delete
 from django.db import models
 
-from selvbetjening.data.events.models import Event, Attend, AttendState
+from selvbetjening.core.events.models import Event, Attend, AttendState
 
 from kita_website.apps.achivements.models import Achivement, AchivementGroup, Award
 

@@ -1,7 +1,7 @@
 from django import test
 from django.contrib.auth.models import User, Group
 
-from selvbetjening.data.events.tests import Database
+from selvbetjening.core.events.tests import Database
 
 from models import GroupMembersAchivement, AchivementGroup,\
      Achivement, Award, GroupMembersAchivement

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 
 from uni_form.helpers import FormHelper, Layout
 
-from selvbetjening.viewhelpers.forms.helpers import InlineFieldset
+from selvbetjening.viewbase.forms.helpers import InlineFieldset
 
 import models
 

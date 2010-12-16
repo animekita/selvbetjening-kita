@@ -3,11 +3,11 @@ from django.utils.translation import ugettext_lazy as _
 from selvbetjening.core.selvadmin.admin import site
 
 # initialize admin site
-import selvbetjening.data.members.admin
+import selvbetjening.core.members.admin
 
 # extend user admin
 from django.contrib.auth.models import User
-from selvbetjening.data.members.admin import UserAdminExt, UserProfileInline
+from selvbetjening.core.members.admin import UserAdminExt, UserProfileInline
 
 from kita_website.apps.kitamembership.models import Membership, MembershipState
 from kita_website.apps.kitamembership.admin import MembershipInline
@@ -26,11 +26,11 @@ site.replace(User, UserAdmin)
 
 # continue initialization
 
-import selvbetjening.data.events.admin
-import selvbetjening.data.invoice.admin
-import selvbetjening.data.logger.admin
+import selvbetjening.core.events.admin
+import selvbetjening.core.invoice.admin
+import selvbetjening.core.logger.admin
 
-import selvbetjening.clients.mailcenter.admin
+import selvbetjening.core.mailcenter.admin
 
 import selvbetjening.notify.concrete5.admin
 

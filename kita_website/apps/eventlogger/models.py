@@ -4,8 +4,8 @@ from logging.handlers import RotatingFileHandler
 from django.conf import settings
 from django.db.models.signals import post_delete, post_save
 
-from selvbetjening.data.events.models import Attend, Selection
-from selvbetjening.data.invoice.models import Payment
+from selvbetjening.core.events.models import Attend, Selection
+from selvbetjening.core.invoice.models import Payment
 
 from kita_website.apps.kitamembership.models import Membership
 

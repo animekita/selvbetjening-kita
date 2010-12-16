@@ -4,9 +4,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
-from selvbetjening.data.invoice.models import Invoice
-from selvbetjening.data.invoice.signals import populate_invoice
-from selvbetjening.data.events.models import Event, Attend
+from selvbetjening.core.invoice.models import Invoice
+from selvbetjening.core.invoice.signals import populate_invoice
+from selvbetjening.core.events.models import Event, Attend
 
 from django.db.models.signals import post_delete, post_save
 
