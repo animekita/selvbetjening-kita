@@ -33,11 +33,16 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify',
     'selvbetjening.notify.concrete5',
     'selvbetjening.notify.proftpd',
+    'selvbetjening.notify.htdigest',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achivements',
     'kita_website.apps.vanillaforum',
 ])
+
+# other settings
+
+NOTIFY_HTDIGEST_REALM = 'Anime Kita Access Control'
 
 # import localsettings, a per deployment configuration file
 try:
