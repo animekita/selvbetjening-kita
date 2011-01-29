@@ -1,16 +1,20 @@
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to, direct_to_template
-
+from django.core.urlresolvers import reverse
 from selvbetjening.portal.profile.views import profile_redirect
 from selvbetjening.sadmin.base import sadmin
 
 from kita_website.apps.kitamembership.views import profile_membershipstatus
 from kita_website.apps.achivements.views import list_achivements
 
+# workaround for missing urls
+from selvbetjening.sadmin.events import models as event_models
+from selvbetjening.sadmin.mailcenter import models as mail_models
+from selvbetjening.sadmin.members import models as members_models
+
 urlpatterns = patterns('',
     url(r'^$', profile_redirect, name='home'),
-
 
     url(r'^profil/medlemskab/', profile_membershipstatus, name='kita_membership'),
     url(r'^profil/achievements/', list_achivements, name='kita_list_achivements'),
