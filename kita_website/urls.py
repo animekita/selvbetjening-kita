@@ -7,7 +7,6 @@ from selvbetjening.sadmin.base import sadmin
 
 from kita_website.apps.kitamembership.views import profile_membershipstatus
 from kita_website.apps.achivements.views import list_achivements
-from kita_website import admin
 
 urlpatterns = patterns('',
     url(r'^$', profile_redirect, name='home'),
@@ -20,7 +19,6 @@ urlpatterns = patterns('',
     (r'^bliv-medlem/', include('selvbetjening.portal.quickregistration.urls')),
     (r'^events/', include('selvbetjening.portal.eventregistration.urls')),
 
-    (r'^admin/', include(admin.site.urls)),
     (r'^sadmin/', include(sadmin.site.urls)),
 )
 
