@@ -23,6 +23,8 @@ urlpatterns = patterns('',
     (r'^bliv-medlem/', include('selvbetjening.portal.quickregistration.urls')),
     (r'^events/', include('selvbetjening.portal.eventregistration.urls')),
 
+    (r'^tilbud/comic-party/', include('kita_website.apps.comicparty.urls')),
+
     (r'^sadmin/', include(sadmin.site.urls)),
 )
 

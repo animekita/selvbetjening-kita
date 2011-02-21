@@ -1,0 +1,72 @@
+{% extends "site.html" %}
+{% load uni_form_tags %}
+
+{% block extrastyle%}
+{{ block.super }}
+{% include "form_includes.html" %}
+{% endblock %}
+
+{% block contenthead %}
+Comic Party bestilling
+{% endblock %}
+
+{% block content %}
+
+<p><a href="http://comicparty.dk/">Comic Party</a> er et dansk tegneserie- og manga blad der udkom med deres første nummer februar 2011. Bladet er på 160+ sider og udkommer hver anden månede.</p>
+
+<ul class="inline">
+<li>&raquo; <a href="http://comicparty.dk/om-comic-party">Læs mere om Comic Party</a></li>
+<li>&raquo; <a href="http://comicparty.dk/tegneserie-previews">Se et preview af bladet</a></li>
+</ul>
+
+<p>Er du betalende medlem af Anime Kita kan du få rabat på Comic Party hvis du bestiller dit abonnement igennem os. Du regnes her som medlem hvis du har lavet en kontingent betaling inden for de seneste to år.</p>
+
+<h2>Det kan du få i rabat</h2>
+
+<p>Normalpris er 50,- pr. nummer inklusiv 15,- i forsendelse (porto). Du kan vælge mellem et 6 måneders og et 12 måneders abonnement, hvor forsendelsen er gratis hvis du vælger 12 måneders abonnementet.</p>
+
+<p>Bestiller du derimod igennem Anime Kita vil et 6 måneders abonnement også have gratis fragt, og et 12 måneders abonnement har både gratis fragt og 10% rabat. Tabellen nedenfor opstiller abonnement priserne før og efter vores rabat.</p>
+
+
+<table class="centering">
+<tr><th></th><th>6 måneder (3 numre)</th><th>12 måneder (6 numre)</th></tr>
+<tr><td>Normalpris</td><td>165,-</td><td>300,- (gratis porto)</td></tr>
+<tr><th>Kitas medlems-pris</th><td>150,- (gratis porto)</td><td>270,- (gratis porto og 10% rabat)</td></tr>
+</table>
+
+<h2>Bestil Comic Party</h2>
+
+{% if is_member %}
+
+<p>Vi gør opmærksom på at vi kun formidler kontakten mellem dig og Alpha Entertainment (Comic Party). Det egentlige køb og efterfølgende forløb er vi ikke en del af.</p>
+
+<p>Når du udfylder den nedenstående formular sker følgende:</p>
+
+<ul>
+<li>Vi sender dit bruger ID, navn, adresse og e-mail (som anført i formularen) til Alpha Entertainment som tilkendegivelse på at du er medlem af Anime Kita.</li>
+<li>Vi sender også en e-mail til dig med betalingsoplysninger som du skal bruge for at betale for dit abonnement.</li>
+</ul>
+
+<p>Når Alpha Entertainment har registreret din betaling vil du modtage en kvittering på e-mail og du vil derefter begynde at modtage dine numre af Comic Party.</p>
+
+<p>Skulle du have spørgsmål omkring bestillingen er du velkommen til at skrive til <a href="kontakt@anime-kita.dk">kontakt@anime-kita.dk</a>.</p>
+
+{% if already_ordered %}
+<p class="warning">Vi har registreret at du allerede har bestilt et abonnement igennem os inden for de sidste 4 måneder. Vi gør opmærksom på at dette tilbud kun gælder for vores egne medlemmer og er derfor begrænset til et abonnement pr. medlem.<br/><br/>Bestiller du abonnementet igen af tekniske årsager så skriv venligst en kommentar i bestillingen herom så vi lettere kan behandle den.</p>
+{% endif %}
+
+<span id="formular"></span>
+
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}
+
+{% else %}
+
+<p class="error">Du er ikke registreret som betalende medlem af foreningen på nuværende tidspunkt. Du kan til enhver tid se din medlems-status <a href="{% url kita_membership %}">her</a>.</p>
+
+<p>Du kan læse mere om hvordan du betaler kontingent til foreningen <a href="http://www.anime-kita.dk/bliv-medlem/">på vores hjemmeside</a>. Hvis du skulle være i tvivl om dit medlemskab eller hvordan du bliver betalende medlem så skriv endelig til os på <a href="mailto:kontakt@anime-kita.dk">kontakt@anime-kita.dk</a>.</p>
+
+{% endif %}
+
+{% endblock %}
