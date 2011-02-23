@@ -36,6 +36,8 @@ Comic Party bestilling
 
 <h2>Bestil Comic Party</h2>
 
+{% block order_area %}
+
 {% if is_member %}
 
 <p>Vi gør opmærksom på at vi kun formidler kontakten mellem dig og Alpha Entertainment (Comic Party). Det egentlige køb og efterfølgende forløb er vi ikke en del af.</p>
@@ -47,13 +49,15 @@ Comic Party bestilling
 <li>Vi sender også en e-mail til dig med betalingsoplysninger som du skal bruge for at betale for dit abonnement.</li>
 </ul>
 
-<p>Når Alpha Entertainment har registreret din betaling vil du modtage en kvittering på e-mail og du vil derefter begynde at modtage dine numre af Comic Party.</p>
+<p>Når Alpha Entertainment har registreret din betaling vil du modtage en kvittering på e-mail og du vil derefter begynde at modtage dine numre af Comic Party. Som udgangspunkt gælder dit abonnement fra næste nummer der bliver udgivet.</p>
 
 <p>Skulle du have spørgsmål omkring bestillingen er du velkommen til at skrive til <a href="kontakt@anime-kita.dk">kontakt@anime-kita.dk</a>.</p>
 
 {% if already_ordered %}
 <p class="warning">Vi har registreret at du allerede har bestilt et abonnement igennem os inden for de sidste 4 måneder. Vi gør opmærksom på at dette tilbud kun gælder for vores egne medlemmer og er derfor begrænset til et abonnement pr. medlem.<br/><br/>Bestiller du abonnementet igen af tekniske årsager så skriv venligst en kommentar i bestillingen herom så vi lettere kan behandle den.</p>
 {% endif %}
+
+<p class="notice">Du kan til enhver tid aflyse dit abonnement ved at <a href="http://comicparty.dk/kontakt">ringe eller skrive til forlaget, Alpha Entertainment</a>.</p>
 
 <span id="formular"></span>
 
@@ -68,5 +72,7 @@ Comic Party bestilling
 <p>Du kan læse mere om hvordan du betaler kontingent til foreningen <a href="http://www.anime-kita.dk/bliv-medlem/">på vores hjemmeside</a>. Hvis du skulle være i tvivl om dit medlemskab eller hvordan du bliver betalende medlem så skriv endelig til os på <a href="mailto:kontakt@anime-kita.dk">kontakt@anime-kita.dk</a>.</p>
 
 {% endif %}
+
+{% endblock %}
 
 {% endblock %}

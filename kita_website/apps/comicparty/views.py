@@ -14,6 +14,10 @@ from forms import OrderForm
 
 def register(request):
 
+    if not request.user.is_authenticated():
+        return render_to_response('comicparty/authenticate.html',
+                                  context_instance=RequestContext(request))
+
     is_member = Membership.objects.get_membership_state(request.user) != MembershipState.INACTIVE
     already_ordered = Order.objects.filter(user=request.user)\
                                    .filter(timestamp__gt=datetime.now() - timedelta(days=4*30))\

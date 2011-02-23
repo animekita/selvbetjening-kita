@@ -1,5 +1,7 @@
 # -- encoding: utf8 --
 
+from datetime import timedelta
+
 from django.db import models
 from django.utils.translation import ugettext as _
 
@@ -21,7 +23,7 @@ class Order(models.Model):
     subscription = models.IntegerField(choices=SUBSCRIPTION_CHOICES,
                                        default=SUBSCRIPTION_6,
                                        verbose_name='Abonnement')
-    issue = models.IntegerField(verbose_name='Ønskede numre')
+
 
     name = models.CharField(max_length=256, verbose_name='Navn')
     street = models.CharField(max_length=256, verbose_name='Vej')
@@ -35,6 +37,13 @@ class Order(models.Model):
                                help_text='Kommentar til Alpha Entertainment.')
 
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def already_ordered(self):
+        return Order.objects.filter(user=self.user)\
+                            .filter(timestamp__gt=self.timestamp - timedelta(days=4*30))\
+                            .exclude(pk=self.pk)\
+                            .exists()
 
 # email sources
 

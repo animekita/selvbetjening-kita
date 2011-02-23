@@ -5,5 +5,6 @@ urlpatterns = patterns('kita_website.apps.comicparty.views',
     url('^godkendt/$', direct_to_template,
         kwargs={'template' : 'comicparty/accepted.html'},
         name='comicparty_accepted'),
-    url('^$', 'register'),
+    url('^$', 'register',
+        name='comicparty_register'),
 )
