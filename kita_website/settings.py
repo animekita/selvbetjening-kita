@@ -37,13 +37,13 @@ INSTALLED_APPS.extend([
 
     'selvbetjening.sadmin.base',
     'selvbetjening.sadmin.members',
-#    'selvbetjening.sadmin.events',
+    'selvbetjening.sadmin.events',
     'selvbetjening.sadmin.mailcenter',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achivements',
     'kita_website.apps.vanillaforum',
-#    'kita_website.apps.comicparty',
+    'kita_website.apps.comicparty',
 ])
 
 # import localsettings, a per deployment configuration file
