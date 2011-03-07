@@ -33,7 +33,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify.concrete5',
     'selvbetjening.notify.proftpd',
     'selvbetjening.notify.htdigest',
-#    'selvbetjening.notify.vanillaforum',
+    'selvbetjening.notify.vanillaforum',
 
     'selvbetjening.sadmin.base',
     'selvbetjening.sadmin.members',
