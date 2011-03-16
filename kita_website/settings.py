@@ -33,7 +33,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify.concrete5',
     'selvbetjening.notify.proftpd',
     'selvbetjening.notify.htdigest',
-#    'selvbetjening.notify.vanillaforum',
+    'selvbetjening.notify.vanillaforum',
 
     'selvbetjening.sadmin.base',
     'selvbetjening.sadmin.members',
@@ -43,6 +43,7 @@ INSTALLED_APPS.extend([
     'kita_website.apps.kitamembership',
     'kita_website.apps.achivements',
     'kita_website.apps.vanillaforum',
+    'kita_website.apps.comicparty',
 ])
 
 # import localsettings, a per deployment configuration file

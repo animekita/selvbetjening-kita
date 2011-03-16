@@ -43,26 +43,17 @@ class MembershipType(object):
 
     NONE = 'NONE'
 
-    @staticmethod
-    def get_display_name(membership_type):
-        names = {'FULL' : _('Full payment'),
-                 'FRATE' : _('First rate'),
-                 'SRATE' : _('Second rate'),
-                 'NONE' : _('No membership payment')}
+    names = {'FULL' : _('Full payment'),
+             'FRATE' : _('First rate'),
+             'SRATE' : _('Second rate'),
+             'NONE' : _('No membership payment')}
 
-        return unicode(names.get(membership_type, membership_type))
+    @classmethod
+    def get_display_name(cls, membership_type):
+
+        return unicode(cls.names.get(membership_type, membership_type))
 
 class MembershipManager(models.Manager):
-    def create(self, **kwargs):
-        invoice = kwargs.get('invoice', None)
-
-        if invoice is None:
-            invoice = Invoice.objects.create(user=kwargs['user'],
-                                             name='Payment')
-            kwargs['invoice'] = invoice
-
-        return super(MembershipManager, self).create(**kwargs)
-
     def get_membership_state(self, user, event=None, handle_as_paid_invoice=None, handle_as_unpaid_invoice=None):
         if handle_as_paid_invoice is None:
             handle_as_paid_invoice = []
@@ -220,7 +211,8 @@ class Membership(models.Model):
     event = models.ForeignKey(Event, blank=True, null=True)
 
     bind_date = models.DateTimeField()
-    membership_type = models.CharField(max_length=5)
+    membership_type = models.CharField(max_length=5, choices=
+        [(key, MembershipType.get_display_name(key)) for key in MembershipType.names])
 
     objects = MembershipManager()
 
@@ -239,6 +231,16 @@ class Membership(models.Model):
             return rate
         else:
             return rate / 2
+
+    def save(self, *args, **kwargs):
+
+        try:
+            self.invoice
+        except Invoice.DoesNotExist:
+            self.invoice = Invoice.objects.create(user=self.user,
+                                                  name='Payment')
+
+        return super(Membership, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return unicode(MembershipType.get_display_name(self.membership_type))
@@ -279,3 +281,8 @@ class YearlyRate(models.Model):
 
     def __unicode__(self):
         return _(u"Yearly rate for %s") % self.year
+
+from selvbetjening.sadmin.base.sadmin import site
+from admin import MembershipAdmin
+
+site.register('kita/membership', MembershipAdmin)
