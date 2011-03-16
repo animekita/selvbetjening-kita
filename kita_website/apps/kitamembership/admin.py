@@ -47,6 +47,7 @@ class MembershipAdmin(SBoundModelAdmin):
         # insert reference of this admin into members admin
         from django.conf.urls.defaults import patterns, url, include
 
+        from selvbetjening.sadmin.members import models # ensure members admin is instanisated
         user_admin = site.get('members')
         old_get_urls = user_admin.get_urls
         local_urls = self.urls
