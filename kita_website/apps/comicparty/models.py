@@ -9,8 +9,6 @@ from django.contrib.auth.models import User
 
 from selvbetjening.core.mailcenter.sources import Source
 
-import nav
-
 class Order(models.Model):
     SUBSCRIPTION_12 = 12
     SUBSCRIPTION_6 = 6
