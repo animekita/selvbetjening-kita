@@ -1,9 +1,9 @@
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
-from kita_website.apps.achievements.models import Achivement, Award
+from kita_website.apps.achievements.models import Achievement, Award
 
-# Member of Kita (free) Achivement
+# Member of Kita (free) Achievement
 #
 # - Automatically award achievement when user is created
 
@@ -12,7 +12,7 @@ def user_created_handler(sender, **kwargs):
     created = kwargs['created']
 
     if created:
-        achievement = Achivement.Default.member_of_kita()
+        achievement = Achievement.Default.member_of_kita()
 
         Award.objects.create(achievement=achievement,
                              user=user,

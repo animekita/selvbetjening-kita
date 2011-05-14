@@ -2,7 +2,7 @@
 
 <h2>Achievements</h2>
 
-<p>Du har <img src="{{MEDIA_URL}}graphics/icons/medal_gold_3.png" /> x {{awards.count}} achievements. <a href="{% url kita_list_achievements %}">Se alle achievements</a>.</p>
+<p>Du har <b>{{awards.count}}</b> achievements. <a href="{% url kita_list_achievements %}">Se alle achievements</a>.</p>
 
 {% for award in awards %}
 
@@ -13,12 +13,17 @@
 {% endif %}
 
 <div class="profile-achievement">
-    <span class="profile-achi{{award.timestamp}}
 
-    {{award.achievement.name}}
+    <span class="profile-achievement-timestamp">
+        {{award.timestamp|date:"d. F Y"}}
+    </span>
 
-    <span class="profile-achievement-comment">
-    {% if award.note %}({{award.note}}){% endif %}
+    <span class="profile-achievement-award">
+        {{award.achievement.name}}
+    <span>
+
+    <span class="profile-achievement-note">
+        {{award.note}}
     </span>
 </div>
 

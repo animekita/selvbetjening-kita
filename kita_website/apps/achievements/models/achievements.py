@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class AchivementGroup(models.Model):
+class AchievementGroup(models.Model):
     slug = models.SlugField(primary_key=True)
 
     name = models.CharField(max_length=255)
@@ -13,7 +13,7 @@ class AchivementGroup(models.Model):
         @staticmethod
         def events(orm=None):
             if orm is None:
-                orm = AchivementGroup
+                orm = AchievementGroup
 
             group, created = orm.objects.get_or_create(
                 slug='events', defaults={'name' : 'Arrangementer'})
@@ -23,7 +23,7 @@ class AchivementGroup(models.Model):
         @staticmethod
         def general(orm=None):
             if orm is None:
-                orm = AchivementGroup
+                orm = AchievementGroup
 
             group, created = orm.objects.get_or_create(
                 slug='general', defaults={'name' : 'Overordnet'})
@@ -33,10 +33,10 @@ class AchivementGroup(models.Model):
     def __unicode__(self):
         return self.name
 
-class Achivement(models.Model):
+class Achievement(models.Model):
     slug = models.SlugField(primary_key=True)
 
-    group = models.ForeignKey(AchivementGroup)
+    group = models.ForeignKey(AchievementGroup)
     name = models.CharField(max_length=255)
 
     def __unicode__(self):
@@ -49,16 +49,16 @@ class Achivement(models.Model):
         @staticmethod
         def member_of_kita(orm=None, group_orm=None):
             if orm is None:
-                orm = Achivement
+                orm = Achievement
 
             achievement, created = orm.objects.get_or_create(
                 slug='member_of_kita', defaults={'name' : 'Medlem af Anime Kita',
-                                                 'group' : AchivementGroup.Default.general(group_orm)})
+                                                 'group' : AchievementGroup.Default.general(group_orm)})
 
             return achievement
 
 class Award(models.Model):
-    achievement = models.ForeignKey(Achivement)
+    achievement = models.ForeignKey(Achievement)
     user = models.ForeignKey(User)
 
     note = models.CharField(max_length=255, blank=True)

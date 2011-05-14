@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 
 from selvbetjening.core.events.models import AttendState
 
-from kita_website.apps.achievements.models import AchivementGroup
+from kita_website.apps.achievements.models import AchievementGroup
 
 class Migration(DataMigration):
 
@@ -21,21 +21,21 @@ class Migration(DataMigration):
         for event in orm['events.Event'].objects.all():
 
             try:
-                relation = orm['achievements.EventAttendanceAchivement'].\
+                relation = orm['achievements.EventAttendanceAchievement'].\
                          objects.get(event=event)
 
                 achievement = relation.achievement
 
             except ObjectDoesNotExist:
-                group = AchivementGroup.Default.events(
-                    orm=orm['achievements.AchivementGroup'])
+                group = AchievementGroup.Default.events(
+                    orm=orm['achievements.AchievementGroup'])
 
-                achievement = orm['achievements.Achivement'].objects.\
+                achievement = orm['achievements.Achievement'].objects.\
                            create(name=event.title,
                                   slug=slugify(event.title),
                                   group=group)
 
-                relation = orm['achievements.EventAttendanceAchivement'].objects.\
+                relation = orm['achievements.EventAttendanceAchievement'].objects.\
                          create(event=event,
                                 achievement=achievement)
 
@@ -59,27 +59,27 @@ class Migration(DataMigration):
 
     models = {
         'achievements.achievement': {
-            'Meta': {'object_name': 'Achivement'},
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.AchivementGroup']"}),
+            'Meta': {'object_name': 'Achievement'},
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.AchievementGroup']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
         'achievements.achievementgroup': {
-            'Meta': {'object_name': 'AchivementGroup'},
+            'Meta': {'object_name': 'AchievementGroup'},
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
         'achievements.award': {
             'Meta': {'object_name': 'Award'},
-            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achivement']"}),
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achievement']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'note': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'achievements.eventattendanceachievement': {
-            'Meta': {'unique_together': "(('event', 'achievement'),)", 'object_name': 'EventAttendanceAchivement'},
-            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achivement']"}),
+            'Meta': {'unique_together': "(('event', 'achievement'),)", 'object_name': 'EventAttendanceAchievement'},
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achievement']"}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },

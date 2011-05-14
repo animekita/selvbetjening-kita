@@ -4,13 +4,13 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
-from kita_website.apps.achievements.models import Achivement
+from kita_website.apps.achievements.models import Achievement
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        achievement = Achivement.Default.member_of_kita(orm=orm.Achivement,
-                                                       group_orm=orm.AchivementGroup)
+        achievement = Achievement.Default.member_of_kita(orm=orm.Achievement,
+                                                       group_orm=orm.AchievementGroup)
 
         for user in orm['auth.User'].objects.all():
             orm.Award.objects.create(achievement=achievement,
@@ -24,27 +24,27 @@ class Migration(DataMigration):
 
     models = {
         'achievements.achievement': {
-            'Meta': {'object_name': 'Achivement'},
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.AchivementGroup']"}),
+            'Meta': {'object_name': 'Achievement'},
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.AchievementGroup']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
         'achievements.achievementgroup': {
-            'Meta': {'object_name': 'AchivementGroup'},
+            'Meta': {'object_name': 'AchievementGroup'},
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
         'achievements.award': {
             'Meta': {'object_name': 'Award'},
-            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achivement']"}),
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achievement']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'note': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'achievements.eventattendanceachievement': {
-            'Meta': {'unique_together': "(('event', 'achievement'),)", 'object_name': 'EventAttendanceAchivement'},
-            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achivement']"}),
+            'Meta': {'unique_together': "(('event', 'achievement'),)", 'object_name': 'EventAttendanceAchievement'},
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achievement']"}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },

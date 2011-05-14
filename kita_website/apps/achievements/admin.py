@@ -2,27 +2,27 @@ from django.contrib import admin
 
 from selvbetjening.core.selvadmin.admin import site
 
-from models import Achivement, AchivementGroup, Award
+from models import Achievement, AchievementGroup, Award
 
-class AchivementInline(admin.TabularInline):
-    model = Achivement
+class AchievementInline(admin.TabularInline):
+    model = Achievement
     extra = 0
 
-class AchivementGroupAdmin(admin.ModelAdmin):
+class AchievementGroupAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
-    inlines = [AchivementInline,]
+    inlines = [AchievementInline,]
 
-site.register(AchivementGroup, AchivementGroupAdmin)
+site.register(AchievementGroup, AchievementGroupAdmin)
 
 class AwardInline(admin.TabularInline):
     model = Award
     extra = 0
     raw_id_fields = ('user',)
 
-class AchivementAdmin(admin.ModelAdmin):
+class AchievementAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     inlines = [AwardInline,]
 
-site.register(Achivement, AchivementAdmin)
+site.register(Achievement, AchievementAdmin)
 
 site.register(Award)

@@ -5,33 +5,33 @@ from django.db.models.signals import m2m_changed
 from django.db import models
 from django.contrib.auth.models import User, Group
 
-from kita_website.apps.achievements.models import Achivement, AchivementGroup, Award
+from kita_website.apps.achievements.models import Achievement, AchievementGroup, Award
 
 # Event attendance achievement
 #
 # - Automatically award achievement when user joins group (sets note)
 # - Automatically update awarded achievement when user is removed form group (sets note)
-# - Only groups in GroupMembersAchivement are tracked
+# - Only groups in GroupMembersAchievement are tracked
 
-class GroupMembersAchivement(models.Model):
+class GroupMembersAchievement(models.Model):
     group = models.ForeignKey(Group, unique=True)
-    achievement = models.ForeignKey(Achivement, unique=True)
+    achievement = models.ForeignKey(Achievement, unique=True)
 
     class Meta:
         app_label = 'achievements'
 
 def add_group(group_id, user, today):
     try:
-        achievement = GroupMembersAchivement.objects.get(group=group_id).achievement
+        achievement = GroupMembersAchievement.objects.get(group=group_id).achievement
         Award.objects.create(achievement=achievement, user=user,
                              note='%s - nu' % today)
 
-    except GroupMembersAchivement.DoesNotExist:
+    except GroupMembersAchievement.DoesNotExist:
         return #ignore
 
 def remove_group(group_id, user, today):
     try:
-        achievement = GroupMembersAchivement.objects.get(group=group_id).achievement
+        achievement = GroupMembersAchievement.objects.get(group=group_id).achievement
 
         award = Award.objects.filter(achievement=achievement, user=user)\
                              .latest('timestamp')
@@ -40,14 +40,14 @@ def remove_group(group_id, user, today):
             award.note = award.note.replace('- nu', '- %s' % today)
             award.save()
 
-    except GroupMembersAchivement.DoesNotExist:
+    except GroupMembersAchievement.DoesNotExist:
         return # ignore
 
     except Award.DoesNotExist:
         return # ignore
 
 def clear_groups(user, today):
-    for tracked in GroupMembersAchivement.objects.all():
+    for tracked in GroupMembersAchievement.objects.all():
         remove_group(tracked.group, user)
 
 def membership_changed(sender, **kwargs):

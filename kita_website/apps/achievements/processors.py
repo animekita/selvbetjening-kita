@@ -6,7 +6,7 @@ from selvbetjening.portal.profile.models import UserPrivacy
 from selvbetjening.portal.profile.processor_handlers import profile_page_processors, \
      extended_privacy_processors
 
-from models import Achivement, AchivementGroup, Award, Privacy
+from models import Achievement, AchievementGroup, Award, Privacy
 
 class ProfilePageProcessor(object):
     template_name = 'achievements/profile_page.html'
