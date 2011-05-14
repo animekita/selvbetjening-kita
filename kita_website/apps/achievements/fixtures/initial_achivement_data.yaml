@@ -1,14 +1,14 @@
-- model: achivements.achivementgroup
+- model: achievements.achievementgroup
   pk: general
   fields:
     name: Overordnet
 
-- model: achivements.achivementgroup
+- model: achievements.achievementgroup
   pk: events
   fields:
     name: Arrangementer
 
-- model: achivements.achivement
+- model: achievements.achievement
   pk: member_of_kita
   fields:
     group: general

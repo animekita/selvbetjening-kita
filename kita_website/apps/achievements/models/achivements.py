@@ -6,11 +6,8 @@ class AchivementGroup(models.Model):
 
     name = models.CharField(max_length=255)
 
-    def __unicode__(self):
-        return self.name
-
     class Meta:
-        app_label = 'achivements'
+        app_label = 'achievements'
 
     class Default:
         @staticmethod
@@ -33,6 +30,9 @@ class AchivementGroup(models.Model):
 
             return group
 
+    def __unicode__(self):
+        return self.name
+
 class Achivement(models.Model):
     slug = models.SlugField(primary_key=True)
 
@@ -43,7 +43,7 @@ class Achivement(models.Model):
         return self.name
 
     class Meta:
-        app_label = 'achivements'
+        app_label = 'achievements'
 
     class Default:
         @staticmethod
@@ -51,19 +51,19 @@ class Achivement(models.Model):
             if orm is None:
                 orm = Achivement
 
-            achivement, created = orm.objects.get_or_create(
+            achievement, created = orm.objects.get_or_create(
                 slug='member_of_kita', defaults={'name' : 'Medlem af Anime Kita',
                                                  'group' : AchivementGroup.Default.general(group_orm)})
 
-            return achivement
+            return achievement
 
 class Award(models.Model):
-    achivement = models.ForeignKey(Achivement)
+    achievement = models.ForeignKey(Achivement)
     user = models.ForeignKey(User)
 
     note = models.CharField(max_length=255, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label = 'achivements'
+        app_label = 'achievements'
 

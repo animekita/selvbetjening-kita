@@ -8,9 +8,9 @@ from models import GroupMembersAchivement, AchivementGroup,\
 
 class GroupMembershipTest(test.TestCase):
     def setUp(self):
-        achivementGroup = AchivementGroup.objects.create(name='ag', slug='ag')
-        self.achivement = Achivement.objects.create(name='a', slug='a',
-                                                    group=achivementGroup)
+        achievementGroup = AchivementGroup.objects.create(name='ag', slug='ag')
+        self.achievement = Achivement.objects.create(name='a', slug='a',
+                                                    group=achievementGroup)
 
         self.group = Group.objects.create(name='generic group')
         self.user = Database.new_user()
@@ -21,7 +21,7 @@ class GroupMembershipTest(test.TestCase):
         self.assertEqual(0, Award.objects.all().count())
 
     def test_add_user_to_group(self):
-        GroupMembersAchivement.objects.create(achivement=self.achivement,
+        GroupMembersAchivement.objects.create(achievement=self.achievement,
                                               group=self.group)
 
         self.user.groups.add(self.group)
@@ -29,7 +29,7 @@ class GroupMembershipTest(test.TestCase):
         self.assertEqual(1, Award.objects.all().count())
 
     def test_remove_user_from_group(self):
-        GroupMembersAchivement.objects.create(achivement=self.achivement,
+        GroupMembersAchivement.objects.create(achievement=self.achievement,
                                               group=self.group)
 
         self.user.groups.add(self.group)

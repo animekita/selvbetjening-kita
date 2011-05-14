@@ -4,29 +4,29 @@ from django.db import models
 
 from selvbetjening.core.events.models import Event, Attend, AttendState
 
-from kita_website.apps.achivements.models import Achivement, AchivementGroup, Award
+from kita_website.apps.achievements.models import Achivement, AchivementGroup, Award
 
-# Event attendance achivement
+# Event attendance achievement
 #
-# - Automatically creates achivement when event is created
-# - Automatically award achivement when user attended event
-# - Automatically revoke awarded achivement if user is removed from attended status
+# - Automatically creates achievement when event is created
+# - Automatically award achievement when user attended event
+# - Automatically revoke awarded achievement if user is removed from attended status
 
 class EventAttendanceAchivement(models.Model):
     event = models.ForeignKey(Event)
-    achivement = models.ForeignKey(Achivement)
+    achievement = models.ForeignKey(Achivement)
 
     class Meta:
-        unique_together = ('event', 'achivement')
-        app_label = 'achivements'
+        unique_together = ('event', 'achievement')
+        app_label = 'achievements'
 
 def attendance_deleted_handler(sender, **kwargs):
     attend = kwargs['instance']
 
     relation = EventAttendanceAchivement.objects.get(event=attend.event)
-    achivement = relation.achivement
+    achievement = relation.achievement
 
-    Award.objects.filter(achivement=achivement, user=attend.user).delete()
+    Award.objects.filter(achievement=achievement, user=attend.user).delete()
 
 post_delete.connect(attendance_deleted_handler, sender=Attend)
 
@@ -34,12 +34,12 @@ def attendance_changed_handler(sender, **kwargs):
     attend = kwargs['instance']
 
     relation = EventAttendanceAchivement.objects.get(event=attend.event)
-    achivement = relation.achivement
+    achievement = relation.achievement
 
     if attend.state == AttendState.attended:
-        Award.objects.get_or_create(achivement=achivement, user=attend.user)
+        Award.objects.get_or_create(achievement=achievement, user=attend.user)
     else:
-        Award.objects.filter(achivement=achivement, user=attend.user).delete()
+        Award.objects.filter(achievement=achievement, user=attend.user).delete()
 
 
 post_save.connect(attendance_changed_handler, sender=Attend)
@@ -51,12 +51,12 @@ def event_changed_handler(sender, **kwargs):
     if created:
         group = AchivementGroup.Default.events()
 
-        achivement = Achivement.objects.create(name=event.title,
+        achievement = Achivement.objects.create(name=event.title,
                                                slug=slugify(event.title),
                                                group=group)
 
         EventAttendanceAchivement.objects.create(event=event,
-                                                 achivement=achivement)
+                                                 achievement=achievement)
 
 post_save.connect(event_changed_handler, sender=Event)
 

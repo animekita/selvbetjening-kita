@@ -5,25 +5,25 @@ from django.db.models.signals import m2m_changed
 from django.db import models
 from django.contrib.auth.models import User, Group
 
-from kita_website.apps.achivements.models import Achivement, AchivementGroup, Award
+from kita_website.apps.achievements.models import Achivement, AchivementGroup, Award
 
-# Event attendance achivement
+# Event attendance achievement
 #
-# - Automatically award achivement when user joins group (sets note)
-# - Automatically update awarded achivement when user is removed form group (sets note)
+# - Automatically award achievement when user joins group (sets note)
+# - Automatically update awarded achievement when user is removed form group (sets note)
 # - Only groups in GroupMembersAchivement are tracked
 
 class GroupMembersAchivement(models.Model):
     group = models.ForeignKey(Group, unique=True)
-    achivement = models.ForeignKey(Achivement, unique=True)
+    achievement = models.ForeignKey(Achivement, unique=True)
 
     class Meta:
-        app_label = 'achivements'
+        app_label = 'achievements'
 
 def add_group(group_id, user, today):
     try:
-        achivement = GroupMembersAchivement.objects.get(group=group_id).achivement
-        Award.objects.create(achivement=achivement, user=user,
+        achievement = GroupMembersAchivement.objects.get(group=group_id).achievement
+        Award.objects.create(achievement=achievement, user=user,
                              note='%s - nu' % today)
 
     except GroupMembersAchivement.DoesNotExist:
@@ -31,9 +31,9 @@ def add_group(group_id, user, today):
 
 def remove_group(group_id, user, today):
     try:
-        achivement = GroupMembersAchivement.objects.get(group=group_id).achivement
+        achievement = GroupMembersAchivement.objects.get(group=group_id).achievement
 
-        award = Award.objects.filter(achivement=achivement, user=user)\
+        award = Award.objects.filter(achievement=achievement, user=user)\
                              .latest('timestamp')
 
         if '- nu' in award.note:

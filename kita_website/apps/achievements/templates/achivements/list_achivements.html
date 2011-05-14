@@ -1,0 +1,27 @@
+{% extends "site.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Alle achievements' 'kita_list_achievements' %}
+{% endblock %}
+
+{% block contenthead %}Achievements{% endblock %}
+
+{% block content %}
+
+{% for achievement in achievements %}
+
+{% if not achievement.group.slug == 'general' %}
+    {% ifchanged achievement.group %}
+        <h3>{{achievement.group.name}}</h3>
+    {% endifchanged %}
+{% endif %}
+
+<div class="profile-achievement">
+    <img src="{{MEDIA_URL}}graphics/icons/medal_{% if achievement in awarded %}gold_3.png{% else %}silver_3.png{% endif %}" />{{achievement.name}}
+</div>
+
+{% endfor %}
+
+{% endblock %}

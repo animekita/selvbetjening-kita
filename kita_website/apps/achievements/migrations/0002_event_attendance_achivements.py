@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 
 from selvbetjening.core.events.models import AttendState
 
-from kita_website.apps.achivements.models import AchivementGroup
+from kita_website.apps.achievements.models import AchivementGroup
 
 class Migration(DataMigration):
 
@@ -21,35 +21,35 @@ class Migration(DataMigration):
         for event in orm['events.Event'].objects.all():
 
             try:
-                relation = orm['achivements.EventAttendanceAchivement'].\
+                relation = orm['achievements.EventAttendanceAchivement'].\
                          objects.get(event=event)
 
-                achivement = relation.achivement
+                achievement = relation.achievement
 
             except ObjectDoesNotExist:
                 group = AchivementGroup.Default.events(
-                    orm=orm['achivements.AchivementGroup'])
+                    orm=orm['achievements.AchivementGroup'])
 
-                achivement = orm['achivements.Achivement'].objects.\
+                achievement = orm['achievements.Achivement'].objects.\
                            create(name=event.title,
                                   slug=slugify(event.title),
                                   group=group)
 
-                relation = orm['achivements.EventAttendanceAchivement'].objects.\
+                relation = orm['achievements.EventAttendanceAchivement'].objects.\
                          create(event=event,
-                                achivement=achivement)
+                                achievement=achievement)
 
             attendees = orm['events.Attend'].objects.\
                       filter(event=event, state=AttendState.attended)
 
             for attendee in attendees:
                 try:
-                    orm['achivements.Award'].objects.\
-                       get(achivement=achivement,
+                    orm['achievements.Award'].objects.\
+                       get(achievement=achievement,
                            user=attendee.user)
                 except ObjectDoesNotExist:
-                    orm['achivements.Award'].objects.\
-                       create(achivement=achivement,
+                    orm['achievements.Award'].objects.\
+                       create(achievement=achievement,
                               user=attendee.user)
 
 
@@ -58,28 +58,28 @@ class Migration(DataMigration):
 
 
     models = {
-        'achivements.achivement': {
+        'achievements.achievement': {
             'Meta': {'object_name': 'Achivement'},
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achivements.AchivementGroup']"}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.AchivementGroup']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
-        'achivements.achivementgroup': {
+        'achievements.achievementgroup': {
             'Meta': {'object_name': 'AchivementGroup'},
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
-        'achivements.award': {
+        'achievements.award': {
             'Meta': {'object_name': 'Award'},
-            'achivement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achivements.Achivement']"}),
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achivement']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'note': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
-        'achivements.eventattendanceachivement': {
-            'Meta': {'unique_together': "(('event', 'achivement'),)", 'object_name': 'EventAttendanceAchivement'},
-            'achivement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achivements.Achivement']"}),
+        'achievements.eventattendanceachievement': {
+            'Meta': {'unique_together': "(('event', 'achievement'),)", 'object_name': 'EventAttendanceAchivement'},
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achivement']"}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
@@ -197,4 +197,4 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['events', 'achivements']
+    complete_apps = ['events', 'achievements']

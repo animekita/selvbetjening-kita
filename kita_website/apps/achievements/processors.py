@@ -9,7 +9,7 @@ from selvbetjening.portal.profile.processor_handlers import profile_page_process
 from models import Achivement, AchivementGroup, Award, Privacy
 
 class ProfilePageProcessor(object):
-    template_name = 'achivements/profile_page.html'
+    template_name = 'achievements/profile_page.html'
 
     def __init__(self, request, user):
         self.request = request
@@ -20,10 +20,10 @@ class ProfilePageProcessor(object):
         privacy, created = Privacy.objects.get_or_create(user=self.user)
 
         if own_profile or \
-           (user_privacy.public_profile and privacy.public_achivements):
+           (user_privacy.public_profile and privacy.public_achievements):
 
             awards = Award.objects.filter(user=self.user).\
-                   order_by('-achivement__group__pk', 'achivement__name', 'note')
+                   order_by('-achievement__group__pk', 'achievement__name', 'note')
 
             return render_to_string(self.template_name,
                                     {'awards' : awards,},
@@ -41,12 +41,12 @@ class ExtendedPrivacyProcessor(object):
         self.privacy, created = Privacy.objects.get_or_create(user=self.user)
 
     def get_privacy_options(self):
-        return [('achievement', 'Achievement', self.privacy.public_achivements),]
+        return [('achievement', 'Achievement', self.privacy.public_achievements),]
 
     def save_privacy_options(self, options):
         privacy_setting = bool(options.get('achievement', False))
 
-        self.privacy.public_achivements = privacy_setting
+        self.privacy.public_achievements = privacy_setting
         self.privacy.save()
 
 extended_privacy_processors.register(ExtendedPrivacyProcessor)

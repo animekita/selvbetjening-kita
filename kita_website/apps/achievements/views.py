@@ -5,13 +5,13 @@ from django.contrib.auth.decorators import login_required
 from models import Achivement, AchivementGroup
 
 @login_required
-def list_achivements(request,
-                     template_name='achivements/list_achivements.html'):
+def list_achievements(request,
+                     template_name='achievements/list_achievements.html'):
 
-    achivements = Achivement.objects.all().order_by('-group__pk', 'name')
-    awarded = achivements.filter(award__user=request.user)
+    achievements = Achivement.objects.all().order_by('-group__pk', 'name')
+    awarded = achievements.filter(award__user=request.user)
 
     return render_to_response(template_name,
-                              {'achivements' : achivements,
+                              {'achievements' : achievements,
                                'awarded' : awarded},
                               context_instance=RequestContext(request))
