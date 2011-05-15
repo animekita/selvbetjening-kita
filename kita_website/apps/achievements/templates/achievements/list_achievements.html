@@ -10,17 +10,33 @@
 
 {% block content %}
 
-{% for achievement in achievements %}
+{% for group in groups %}
 
-{% if not achievement.group.slug == 'general' %}
-    {% ifchanged achievement.group %}
-        <h3>{{achievement.group.name}}</h3>
-    {% endifchanged %}
-{% endif %}
+    {% for achievement in group.achievement_set.all %}
+        {% if forloop.first and not group.slug == 'general' %}
+            <h2>{{group.name}}</h2>
+        {% endif %}
 
-<div class="profile-achievement">
-    <img src="{{MEDIA_URL}}graphics/icons/medal_{% if achievement in awarded %}gold_3.png{% else %}silver_3.png{% endif %}" />{{achievement.name}}
-</div>
+        <div class="profile-achievement{% if achievement in awarded %} profile-achievement-awarded{% endif %}">
+            {{achievement.name}}
+        </div>
+    {% endfor %}
+
+    {% for subgroup in group.subgroups.all %}
+
+        {% for achievement in subgroup.achievement_set.all %}
+            {% if forloop.first %}
+                <h3>{{group.name}} - {{subgroup.name}}</h3>
+            {% endif %}
+
+            <div class="profile-achievement{% if achievement in awarded %} profile-achievement-awarded{% endif %}">
+                <span class="profile-achievement-award">
+                    {{achievement.name}}
+                <span>
+            </div>
+        {% endfor %}
+
+    {% endfor %}
 
 {% endfor %}
 

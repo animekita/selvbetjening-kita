@@ -2,14 +2,4 @@
   pk: general
   fields:
     name: Overordnet
-
-- model: achievements.achievementgroup
-  pk: events
-  fields:
-    name: Arrangementer
-
-- model: achievements.achievement
-  pk: member_of_kita
-  fields:
-    group: general
-    name: Medlem af Anime Kita
+    order: 0

@@ -23,7 +23,7 @@ class ProfilePageProcessor(object):
            (user_privacy.public_profile and privacy.public_achievements):
 
             awards = Award.objects.filter(user=self.user).\
-                   order_by('-achievement__group__pk', 'achievement__name', 'note')
+                   order_by('achievement__group__order', 'achievement__group__pk', '-timestamp')
 
             return render_to_string(self.template_name,
                                     {'awards' : awards,},

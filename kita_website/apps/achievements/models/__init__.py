@@ -1,12 +1,25 @@
 from achievements import AchievementGroup, Achievement, Award
 from privacy import Privacy
 
-from kita_website.apps.achievements.generators.event_attendance import\
-     EventAttendanceAchievement
+from kita_website.apps.achievements.generators.event_attendance import \
+     GroupToAchievementGroup, EventAttendanceAchievement
 
-from kita_website.apps.achievements.generators.group_membership import\
-     GroupMembersAchievement
+from kita_website.apps.achievements.generators.positions import \
+     Position, PositionHistory
 
-import kita_website.apps.achievements.generators.member_of_kita
+from kita_website.apps.achievements.generators.turnaments import \
+     Turnament, Winner
 
 from kita_website.apps.achievements import processors
+
+from kita_website.apps.achievements.generators import event_attendance, \
+     positions, member_of_kita
+
+refresh_achievements_handlers = [event_attendance.refresh,
+                                 member_of_kita.refresh,
+                                 positions.refresh]
+
+from selvbetjening.sadmin.base.sadmin import site
+from kita_website.apps.achievements.admin import PositionAdmin
+
+site.register('achievements', PositionAdmin)

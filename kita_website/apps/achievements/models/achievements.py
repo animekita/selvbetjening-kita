@@ -1,34 +1,24 @@
 from django.db import models
+from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 
 class AchievementGroup(models.Model):
     slug = models.SlugField(primary_key=True)
 
     name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='subgroups')
+
+    order = models.IntegerField(_(u'Order (asc)'), default=5)
 
     class Meta:
         app_label = 'achievements'
 
-    class Default:
-        @staticmethod
-        def events(orm=None):
-            if orm is None:
-                orm = AchievementGroup
+    @staticmethod
+    def get_general_group():
+        group, created = AchievementGroup.objects.get_or_create(
+            slug='general', defaults={'name': 'Overordnet', 'order': 0})
 
-            group, created = orm.objects.get_or_create(
-                slug='events', defaults={'name' : 'Arrangementer'})
-
-            return group
-
-        @staticmethod
-        def general(orm=None):
-            if orm is None:
-                orm = AchievementGroup
-
-            group, created = orm.objects.get_or_create(
-                slug='general', defaults={'name' : 'Overordnet'})
-
-            return group
+        return group
 
     def __unicode__(self):
         return self.name
@@ -39,23 +29,14 @@ class Achievement(models.Model):
     group = models.ForeignKey(AchievementGroup)
     name = models.CharField(max_length=255)
 
+    timestamp = models.DateTimeField(auto_now_add=True, null=True)
+
     def __unicode__(self):
         return self.name
 
     class Meta:
         app_label = 'achievements'
-
-    class Default:
-        @staticmethod
-        def member_of_kita(orm=None, group_orm=None):
-            if orm is None:
-                orm = Achievement
-
-            achievement, created = orm.objects.get_or_create(
-                slug='member_of_kita', defaults={'name' : 'Medlem af Anime Kita',
-                                                 'group' : AchievementGroup.Default.general(group_orm)})
-
-            return achievement
+        ordering = ['-timestamp']
 
 class Award(models.Model):
     achievement = models.ForeignKey(Achievement)

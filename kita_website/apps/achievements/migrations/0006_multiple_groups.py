@@ -1,25 +1,21 @@
 # encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-from kita_website.apps.achievements.models import Achievement
-
-class Migration(DataMigration):
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        achievement = Achievement.Default.member_of_kita(orm=orm.Achievement,
-                                                       group_orm=orm.AchievementGroup)
-
-        for user in orm['auth.User'].objects.all():
-            orm.Award.objects.create(achievement=achievement,
-                                     user=user,
-                                     note='medlemsnummer #%s' % user.pk)
+        
+        # Adding field 'AchievementGroup.parent'
+        db.add_column('achievements_achievementgroup', 'parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['achievements.AchievementGroup'], null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        
+        # Deleting field 'AchievementGroup.parent'
+        db.delete_column('achievements_achievementgroup', 'parent_id')
 
 
     models = {
@@ -32,6 +28,7 @@ class Migration(DataMigration):
         'achievements.achievementgroup': {
             'Meta': {'object_name': 'AchievementGroup'},
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.AchievementGroup']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'primary_key': 'True', 'db_index': 'True'})
         },
         'achievements.award': {
@@ -48,6 +45,18 @@ class Migration(DataMigration):
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
+        'achievements.groupmembersachievement': {
+            'Meta': {'object_name': 'GroupMembersAchievement'},
+            'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achievement']", 'unique': 'True'}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.Group']", 'unique': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        'achievements.privacy': {
+            'Meta': {'object_name': 'Privacy'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'public_achievements': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -55,7 +64,7 @@ class Migration(DataMigration):
             'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'auth.permission': {
-            'Meta': {'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
+            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -68,9 +77,9 @@ class Migration(DataMigration):
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -78,7 +87,7 @@ class Migration(DataMigration):
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         'contenttypes.contenttype': {
-            'Meta': {'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -86,20 +95,26 @@ class Migration(DataMigration):
         },
         'events.event': {
             'Meta': {'object_name': 'Event'},
-            'change_confirmation': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'custom_change_message': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'custom_signup_message': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'custom_status_page': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'enddate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Group']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'invoice_page': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'maximum_attendees': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'move_to_accepted_policy': ('django.db.models.fields.CharField', [], {'default': "'always'", 'max_length': '32'}),
-            'registration_confirmation': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'registration_open': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'show_change_confirmation': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'show_invoice_page': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'show_registration_confirmation': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'registration_open': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'show_custom_change_message': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'show_custom_signup_message': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'show_custom_status_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'startdate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        'events.group': {
+            'Meta': {'object_name': 'Group'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         }
     }
 

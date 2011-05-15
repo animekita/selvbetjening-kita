@@ -8,10 +8,10 @@ from models import Achievement, AchievementGroup
 def list_achievements(request,
                      template_name='achievements/list_achievements.html'):
 
-    achievements = Achievement.objects.all().order_by('-group__pk', 'name')
-    awarded = achievements.filter(award__user=request.user)
+    groups = AchievementGroup.objects.filter(parent=None).order_by('name')
+    awarded = Achievement.objects.filter(award__user=request.user)
 
     return render_to_response(template_name,
-                              {'achievements' : achievements,
+                              {'groups' : groups,
                                'awarded' : awarded},
                               context_instance=RequestContext(request))
