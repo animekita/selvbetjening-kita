@@ -8,17 +8,17 @@ from selvbetjening.core.events.models import Event
 
 from kita_website.apps.achievements.models import Achievement, AchievementGroup, Award
 
-# Turnament Winner Achievement
+# Tournament Winner Achievement
 #
-# - Turnament and winning history tracked in Turnament and Winner
-# - Automatically create achievement if entry is added to Turnament
-# - Automatically remove achievement if entry is removed from Turnament
+# - Tournament and winning history tracked in Tournament and Winner
+# - Automatically create achievement if entry is added to Tournament
+# - Automatically remove achievement if entry is removed from Tournament
 #
 # - Automatically award achievement if entry is added to Winner
 # - Automatically redraw achievement if entry is removed from Winner
-# - Automatically update achievement if Winner or Turnament are changed
+# - Automatically update achievement if Winner or Tournament are changed
 
-class Turnament(models.Model):
+class Tournament(models.Model):
     name = models.CharField(_('name'), max_length=255)
 
     achievement = models.ForeignKey(Achievement, blank=True)
@@ -38,10 +38,10 @@ class Turnament(models.Model):
         self.achievement.name = self.name
         self.achievement.save()
 
-        super(Turnament, self).save(*args, **kwargs)
+        super(Tournament, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        super(Turnament, self).delete(*args, **kwargs)
+        super(Tournament, self).delete(*args, **kwargs)
 
         try:
             self.achievement.delete()
@@ -53,7 +53,7 @@ class Turnament(models.Model):
 
 class Winner(models.Model):
     user = models.ForeignKey(User)
-    turnament = models.ForeignKey(Turnament)
+    tournament = models.ForeignKey(Tournament, db_column='turnament_id')
     event = models.ForeignKey(Event)
 
     note = models.CharField(_(u'note'), max_length=255, blank=True)
@@ -61,21 +61,21 @@ class Winner(models.Model):
     award = models.ForeignKey(Award, blank=True)
 
     class Meta:
-        unique_together = ('user', 'turnament', 'event')
+        unique_together = ('user', 'tournament', 'event')
         app_label = 'achievements'
 
     def save(self, *args, **kwargs):
         try:
             self.award
         except Award.DoesNotExist:
-            self.award = Award.objects.create(achievement=self.turnament.achievement,
+            self.award = Award.objects.create(achievement=self.tournament.achievement,
                                               user=self.user,
                                               note='')
 
         # updates
         self.award.note = self.event.title if self.note == '' else '%s - %s' % (self.note, self.event.title)
         self.award.user = self.user
-        self.award.achievement = self.turnament.achievement
+        self.award.achievement = self.tournament.achievement
         self.award.timestamp = self.event.enddate
         self.award.save()
 
@@ -90,7 +90,7 @@ class Winner(models.Model):
             pass # ignore
 
 def get_achievement_group():
-    group, created = AchievementGroup.objects.get_or_create(slug='turnaments',
+    group, created = AchievementGroup.objects.get_or_create(slug='tournaments',
                                                             defaults={
                                                                 'name': 'Konkurrencer',
                                                                 'order': 3,
