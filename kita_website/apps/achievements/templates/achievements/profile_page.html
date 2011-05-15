@@ -1,0 +1,31 @@
+<div id="profile-achievements">
+
+<h2>Achievements</h2>
+
+<p>Du har <b>{{awards.count}}</b> achievements. <a href="{% url kita_list_achievements %}">Se alle achievements</a>.</p>
+
+{% for award in awards %}
+{% if not award.achievement.group.slug == 'general' %}
+    {% ifchanged award.achievement.group %}
+        <h3>{% if award.achievement.group.parent %}{{award.achievement.group.parent.name}} - {%endif %}{{award.achievement.group.name}}</h3>
+    {% endifchanged %}
+{% endif %}
+
+<div class="profile-achievement profile-achievement-awarded">
+
+    <span class="profile-achievement-timestamp">
+        {{award.timestamp|date:"d. F Y"}}
+    </span>
+
+    <span class="profile-achievement-award">
+        {{award.achievement.name}}
+    <span>
+
+    <span class="profile-achievement-note">
+        {{award.note}}
+    </span>
+</div>
+
+{% endfor %}
+
+</div>
