@@ -26,7 +26,7 @@ class GroupToAchievementGroupManager(models.Manager):
                 slug = 'events'
                 defaults = {'name' : 'Arrangementer'}
             else:
-                parent = self.get_or_create(group=None)
+                parent, created = self.get_or_create(group=None)
 
                 slug = 'events-%s' % group.pk
                 defaults = {'name': group.name, 'parent': parent.achievement_group}
