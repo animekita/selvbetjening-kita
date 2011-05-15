@@ -12,6 +12,7 @@ from kita_website.apps.achievements.views import list_achievements
 from selvbetjening.sadmin.events import models as event_models
 from selvbetjening.sadmin.mailcenter import models as mail_models
 from selvbetjening.sadmin.members import models as members_models
+from kita_website.apps.achievements import models as achievements_models
 from kita_website.apps.comicparty import models as comicparty_models
 
 urlpatterns = patterns('',
