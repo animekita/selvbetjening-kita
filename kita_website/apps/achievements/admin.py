@@ -1,6 +1,6 @@
 from selvbetjening.sadmin.base.sadmin import SModelAdmin, STabularInline, main_menu
 
-from models import Position, PositionHistory, Turnament, Winner
+from models import Position, PositionHistory, Tournament, Winner
 
 class PositionHistoryInline(STabularInline):
     model = PositionHistory
@@ -29,15 +29,15 @@ class PositionAdmin(SModelAdmin):
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url, include
 
-        turnament_admin = TurnamentAdmin()
-        turnament_admin.sadmin_menu = self.sadmin_menu
-        self.sadmin_menu.register(turnament_admin.page_root)
-        turnament_admin.page_root.parent = self.page_root
+        tournament_admin = TournamentAdmin()
+        tournament_admin.sadmin_menu = self.sadmin_menu
+        self.sadmin_menu.register(tournament_admin.page_root)
+        tournament_admin.page_root.parent = self.page_root
 
         urlpatterns = super(PositionAdmin, self).get_urls()
 
         urlpatterns = patterns('',
-            (r'^turnaments/', include(turnament_admin.urls)),
+            (r'^tournaments/', include(tournament_admin.urls)),
         ) + urlpatterns
 
         return urlpatterns
@@ -47,14 +47,14 @@ class WinnerInline(STabularInline):
     exclude = ('award',)
     raw_id_fields = ('user', 'event',)
 
-class TurnamentAdmin(SModelAdmin):
+class TournamentAdmin(SModelAdmin):
     class Meta:
         app_name = 'achievements'
-        name = 'turnament'
-        model = Turnament
+        name = 'tournament'
+        model = Tournament
 
-        display_name = 'Turnament'
-        display_name_plural = 'Turnaments'
+        display_name = 'Tournament'
+        display_name_plural = 'Tournaments'
 
     list_display = ('name',)
     search_fields = ('name',)

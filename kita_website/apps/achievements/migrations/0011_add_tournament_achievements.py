@@ -7,40 +7,40 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'Winner'
         db.create_table('achievements_winner', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('turnament', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['achievements.Turnament'])),
+            ('tournament', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['achievements.Tournament'])),
             ('event', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['events.Event'])),
             ('note', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('award', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['achievements.Award'], blank=True)),
         ))
         db.send_create_signal('achievements', ['Winner'])
 
-        # Adding unique constraint on 'Winner', fields ['user', 'turnament', 'event']
-        db.create_unique('achievements_winner', ['user_id', 'turnament_id', 'event_id'])
+        # Adding unique constraint on 'Winner', fields ['user', 'tournament', 'event']
+        db.create_unique('achievements_winner', ['user_id', 'tournament_id', 'event_id'])
 
-        # Adding model 'Turnament'
-        db.create_table('achievements_turnament', (
+        # Adding model 'Tournament'
+        db.create_table('achievements_tournament', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('achievement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['achievements.Achievement'], blank=True)),
         ))
-        db.send_create_signal('achievements', ['Turnament'])
+        db.send_create_signal('achievements', ['Tournament'])
 
 
     def backwards(self, orm):
-        
-        # Removing unique constraint on 'Winner', fields ['user', 'turnament', 'event']
-        db.delete_unique('achievements_winner', ['user_id', 'turnament_id', 'event_id'])
+
+        # Removing unique constraint on 'Winner', fields ['user', 'tournament', 'event']
+        db.delete_unique('achievements_winner', ['user_id', 'tournament_id', 'event_id'])
 
         # Deleting model 'Winner'
         db.delete_table('achievements_winner')
 
-        # Deleting model 'Turnament'
-        db.delete_table('achievements_turnament')
+        # Deleting model 'Tournament'
+        db.delete_table('achievements_tournament')
 
 
     models = {
@@ -101,19 +101,19 @@ class Migration(SchemaMigration):
             'public_achievements': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
-        'achievements.turnament': {
-            'Meta': {'object_name': 'Turnament'},
+        'achievements.tournament': {
+            'Meta': {'object_name': 'Tournament'},
             'achievement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Achievement']", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'achievements.winner': {
-            'Meta': {'unique_together': "(('user', 'turnament', 'event'),)", 'object_name': 'Winner'},
+            'Meta': {'unique_together': "(('user', 'tournament', 'event'),)", 'object_name': 'Winner'},
             'award': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Award']", 'blank': 'True'}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['events.Event']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'note': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'turnament': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Turnament']"}),
+            'tournament': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['achievements.Tournament']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'auth.group': {

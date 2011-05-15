@@ -7,8 +7,8 @@ from kita_website.apps.achievements.generators.event_attendance import \
 from kita_website.apps.achievements.generators.positions import \
      Position, PositionHistory
 
-from kita_website.apps.achievements.generators.turnaments import \
-     Turnament, Winner
+from kita_website.apps.achievements.generators.tournaments import \
+     Tournament, Winner
 
 from kita_website.apps.achievements import processors
 

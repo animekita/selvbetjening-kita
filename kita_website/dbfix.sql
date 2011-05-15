@@ -5,6 +5,8 @@ rename table achivements_privacy to achievements_privacy;
 rename table achivements_eventattendanceachivement to achievements_eventattendanceachievement;
 rename table achivements_groupmembersachivement to achievements_groupmembersachievement;
 
+rename table achievements_turnament to achievements_tournament;
+
 ALTER TABLE achievements_privacy change public_achivements public_achievements tinyint(1) not null default 0;
 ALTER TABLE achievements_award change achivement_id achievement_id varchar(50) not null;
 ALTER TABLE achievements_eventattendanceachievement change achivement_id achievement_id varchar(50) not null;
