@@ -113,7 +113,7 @@ def leaved_all_groups(user):
     for position in Position.objects.all():
 
         if position.monitor_group:
-            leave_group(position.monitor_group.pk, user)
+            leaved_group(position.monitor_group.pk, user)
 
 def membership_changed(sender, **kwargs):
     user = kwargs['instance']
