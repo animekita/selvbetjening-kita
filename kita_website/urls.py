@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 
     url(r'^profil/medlemskab/', profile_membershipstatus, name='kita_membership'),
     url(r'^profil/achievements/', list_achievements, name='kita_list_achievements'),
+    (r'^profil/opdater/forum/', include('selvbetjening.notify.vanillaforum.urls')),
     (r'^profil/', include('selvbetjening.portal.profile.urls')),
 
     (r'^bliv-medlem/', include('selvbetjening.portal.quickregistration.urls')),

@@ -69,6 +69,12 @@
 					<li><a href="{% url members_username_change %}">Brugernavn</a></li>
 					<li><a href="{% url members_password_change %}">Kodeord</a></li>
 				</ul>
+
+				<h2>Forum</h2>
+				<ul class="leftNav">
+					<li><a href="{% url vanillaforum_editpicture %}">Billede</a></li>
+					<li><a href="{% url vanillaforum_editnotifications %}">Notifikationer</a></li>
+				</ul>
 				{% else %}
 				<ul class="leftNav">
 					<li><a href="{% url quickregistration_register %}"></a></li>
