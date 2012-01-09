@@ -30,8 +30,8 @@ class PositionAdmin(SModelAdmin):
         from django.conf.urls.defaults import patterns, url, include
 
         tournament_admin = TournamentAdmin()
-        tournament_admin.sadmin_menu = self.sadmin_menu
-        self.sadmin_menu.register(tournament_admin.page_root)
+        tournament_admin.module_menu = self.module_menu
+        self.module_menu.register(tournament_admin.page_root)
         tournament_admin.page_root.parent = self.page_root
 
         urlpatterns = super(PositionAdmin, self).get_urls()

@@ -91,12 +91,13 @@ def joined_group(group_pk, user):
         position = Position.objects.get(monitor_group__pk=group_pk)
 
         try:
-            existing = PositionHistory.objects.get(position=position,
-                                                   user=user,
-                                                   leaved=date.today())
-
-            existing.leaved = None
-            existing.save()
+            existing = PositionHistory.objects.filter(position=position,
+                                                      user=user,
+                                                      leaved=date.today())
+            
+            for instance in existing:
+                instance.leaved = None
+                instance.save()
 
         except PositionHistory.DoesNotExist:
             PositionHistory.objects.create(position=position,

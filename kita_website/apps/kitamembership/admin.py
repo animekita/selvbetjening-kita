@@ -62,7 +62,7 @@ class MembershipAdmin(SBoundModelAdmin):
         user_admin.get_urls = overwrite_get_urls
 
         # insert references into members admin
-        self.sadmin_menu = user_admin.object_menu
+        self.module_menu = user_admin.object_menu
         self.page_root.parent = user_admin.page_change
         user_admin.object_menu.register(self.page_root, title=_('Membership'))
 
@@ -132,4 +132,4 @@ class MembershipAdmin(SBoundModelAdmin):
 
 #class MembershipInline(admin.TabularInline):
     #model = Membership
-    #extra = 0
+    #extra = 0z
