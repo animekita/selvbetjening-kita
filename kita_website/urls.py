@@ -8,8 +8,6 @@ from selvbetjening.sadmin.base import sadmin
 from kita_website.apps.kitamembership.views import profile_membershipstatus
 from kita_website.apps.achievements.views import list_achievements
 
-sadmin.site.get_urls() # hotfix
-
 # workaround for missing urls
 from selvbetjening.sadmin.events import models as event_models
 from selvbetjening.sadmin.mailcenter import models as mail_models
