@@ -106,10 +106,14 @@ def refresh():
 def attendance_deleted_handler(sender, **kwargs):
     attend = kwargs['instance']
 
-    relation = EventAttendanceAchievement.objects.get(event=attend.event)
-    achievement = relation.achievement
+    try:
+        relation = EventAttendanceAchievement.objects.get(event__pk=attend.event.pk)
+        achievement = relation.achievement
 
-    Award.objects.filter(achievement=achievement, user=attend.user).delete()
+        Award.objects.filter(achievement=achievement, user=attend.user).delete()
+        
+    except EventAttendanceAchievement.DoesNotExist:
+        pass
 
 post_delete.connect(attendance_deleted_handler, sender=Attend)
 

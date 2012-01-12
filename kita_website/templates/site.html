@@ -4,10 +4,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Anime kita - nordjyllands forening for japansk populærkultur</title>
-		<link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/cms.css" />
+		<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/cms.css" />
 		{% block extrastyle %}{% endblock %}
     </head>
 
@@ -15,7 +15,7 @@
 	<div id="wrapper">
 		<div id="topNavBg"></div>
 		<div id="top">
-			<a href="http://www.anime-kita.dk"><img id="topLogo" src="{{ MEDIA_URL }}graphics/toplogo.png" alt="Anime Kita logo" /></a>
+			<a href="http://www.anime-kita.dk"><img id="topLogo" src="{{ STATIC_URL }}graphics/toplogo.png" alt="Anime Kita logo" /></a>
 			<div id="topNavBgFade"></div>
 			<ul id="topNav">
 				<li><a href="http://www.anime-kita.dk/">home</a></li>
@@ -70,11 +70,14 @@
 					<li><a href="{% url members_password_change %}">Kodeord</a></li>
 				</ul>
 
+				{% comment %}
 				<h2>Forum</h2>
 				<ul class="leftNav">
 					<li><a href="{% url vanillaforum_editpicture %}">Billede</a></li>
 					<li><a href="{% url vanillaforum_editnotifications %}">Notifikationer</a></li>
 				</ul>
+				{% endcomment %}
+				
 				{% else %}
 				<ul class="leftNav">
 					<li><a href="{% url quickregistration_register %}"></a></li>
