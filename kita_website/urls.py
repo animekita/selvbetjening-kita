@@ -8,13 +8,13 @@ from selvbetjening.sadmin.base import sadmin
 from kita_website.apps.kitamembership.views import profile_membershipstatus
 from kita_website.apps.achievements.views import list_achievements
 
+sadmin.site.get_urls() # hotfix
+
 # workaround for missing urls
 from selvbetjening.sadmin.events import models as event_models
 from selvbetjening.sadmin.mailcenter import models as mail_models
 from selvbetjening.sadmin.members import models as members_models
 from kita_website.apps.achievements import models as achievements_models
-
-sadmin.site.get_urls() # hotfix
 
 urlpatterns = patterns('',
     url(r'^$', profile_redirect, name='home'),
