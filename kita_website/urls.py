@@ -14,6 +14,8 @@ from selvbetjening.sadmin.mailcenter import models as mail_models
 from selvbetjening.sadmin.members import models as members_models
 from kita_website.apps.achievements import models as achievements_models
 
+sadmin.site.get_urls() # hotfix
+
 urlpatterns = patterns('',
     url(r'^$', profile_redirect, name='home'),
 
