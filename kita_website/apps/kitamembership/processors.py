@@ -158,7 +158,7 @@ class SignupProcessor(SignupOrChangeProcessor):
 signup_processors.register(SignupProcessor)
 
 class ChangeProcessor(SignupOrChangeProcessor):
-    def __init__(self, request, attendee):
+    def __init__(self, request, attendee, optionforms):
         super(ChangeProcessor, self).__init__(request, attendee=attendee)
 
 change_processors.register(ChangeProcessor)
