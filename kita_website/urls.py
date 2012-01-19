@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to, direct_to_template
 from django.core.urlresolvers import reverse
+
 from selvbetjening.portal.profile.views import profile_redirect
 from selvbetjening.sadmin.base import sadmin
 
@@ -26,6 +27,10 @@ urlpatterns = patterns('',
     (r'^events/', include('selvbetjening.portal.eventregistration.urls')),
 
     (r'^sadmin/', include(sadmin.site.urls)),
+    
+    (r'^api/events/', include('selvbetjening.api.events.urls')),
+    
+    (r'^scheckin/legacy/', include('selvbetjening.scheckin.legacy.urls')),
 )
 
 if getattr(settings, 'STATIC_DEBUG', False):
