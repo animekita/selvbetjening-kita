@@ -54,7 +54,18 @@ class MembershipType(object):
         return unicode(cls.names.get(membership_type, membership_type))
 
 class MembershipManager(models.Manager):
-    def get_membership_state(self, user, event=None, handle_as_paid_invoice=None, handle_as_unpaid_invoice=None):
+    def get_membership_state(self, user, event=None, handle_as_paid_invoice=None, handle_as_unpaid_invoice=None, at_date=None):
+        """
+        If event is provided, then first rate payments made to that event
+        will be reported as if the user had made a full payment or second
+        payment (such that events in which the payment were made can get
+        users reported as full members.
+
+        """
+
+        if at_date is None:
+            at_date = datetime.now()
+
         if handle_as_paid_invoice is None:
             handle_as_paid_invoice = []
 
@@ -62,7 +73,7 @@ class MembershipManager(models.Manager):
             handle_as_unpaid_invoice = []
 
         memberships = []
-        for membership in Membership.objects.filter(user=user).order_by('-bind_date'):
+        for membership in Membership.objects.filter(user=user).filter(bind_date__lt=at_date).order_by('-bind_date'):
             if membership.invoice not in handle_as_unpaid_invoice and \
                (membership.invoice.is_paid() or membership.invoice in handle_as_paid_invoice):
                 memberships.append(membership)
@@ -76,7 +87,7 @@ class MembershipManager(models.Manager):
             last = memberships[0]
 
         payment_quater = self.total_quaters(last.bind_date)
-        date_in_quaters = self.total_quaters(datetime.now())
+        date_in_quaters = self.total_quaters(at_date)
 
         if payment_quater + 8 <= date_in_quaters:
             return MembershipState.INACTIVE

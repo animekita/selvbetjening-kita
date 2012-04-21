@@ -27,9 +27,9 @@ urlpatterns = patterns('',
     (r'^events/', include('selvbetjening.portal.eventregistration.urls')),
 
     (r'^sadmin/', include(sadmin.site.urls)),
-    
-    (r'^api/events/', include('selvbetjening.api.events.urls')),
-    
+
+    (r'^api/events/', include('selvbetjening.api.eventsapi.urls')),
+
     (r'^scheckin/legacy/', include('selvbetjening.scheckin.legacy.urls')),
 )
 
