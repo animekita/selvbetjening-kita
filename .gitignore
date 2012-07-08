@@ -1,0 +1,7 @@
+# Temporary files
+
+*.pyc
+
+# Project management files
+
+.idea
