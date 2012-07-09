@@ -28,9 +28,7 @@ urlpatterns = patterns('',
 
     (r'^sadmin/', include(sadmin.site.urls)),
 
-    (r'^api/events/', include('selvbetjening.api.eventsapi.urls')),
-
-    (r'^scheckin/legacy/', include('selvbetjening.scheckin.legacy.urls')),
+#    (r'^scheckin/legacy/', include('selvbetjening.scheckin.legacy.urls')),
 )
 
 if getattr(settings, 'STATIC_DEBUG', False):

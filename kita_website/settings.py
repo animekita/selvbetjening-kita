@@ -40,8 +40,6 @@ INSTALLED_APPS.extend([
     'selvbetjening.sadmin.events',
     'selvbetjening.sadmin.mailcenter',
 
-    'selvbetjening.api.eventsapi',
-
     'selvbetjening.scheckin.legacy',
 
     'kita_website.apps.kitamembership',
