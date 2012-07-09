@@ -1,5 +1,5 @@
 {% extends "site.html" %}
-{% load uni_form_tags %}
+{% load crispy_forms_tags %}
 
 {% block extrastyle%}
 {{ block.super }}
@@ -62,7 +62,7 @@ Comic Party bestilling
 <span id="formular"></span>
 
 {% with form.helper as helper %}
-    {% uni_form form helper %}
+    {% crispy form helper %}
 {% endwith %}
 
 {% else %}

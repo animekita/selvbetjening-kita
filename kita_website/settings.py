@@ -1,6 +1,6 @@
+import os
 from selvbetjening.settings_base import *
 
-import os
 DIRNAME = os.path.abspath(os.path.dirname(__file__))
 
 # email
@@ -11,7 +11,7 @@ SERVER_EMAIL = 'noreply@anime-kita.dk'
 ROOT_URLCONF = 'kita_website.urls'
 
 ADMINS = (
-    #('admin', 'admin@example.org'),
+    ('admin', 'admin@anime-kita.dk'),
 )
 
 # template directories
@@ -32,7 +32,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.notify',
     'selvbetjening.notify.concrete5',
     'selvbetjening.notify.proftpd',
-    'selvbetjening.notify.htdigest',
+#    'selvbetjening.notify.htdigest',
 #    'selvbetjening.notify.vanillaforum',
 
     'selvbetjening.sadmin.base',
@@ -46,7 +46,7 @@ INSTALLED_APPS.extend([
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achievements',
-    'kita_website.apps.vanillaforum',
+#    'kita_website.apps.vanillaforum',
 ])
 
 # import localsettings, a per deployment configuration file
