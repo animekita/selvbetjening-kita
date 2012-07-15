@@ -258,7 +258,11 @@ class Membership(models.Model):
 
 def update_invoice_handler(sender, **kwargs):
     instance = kwargs['instance']
-    instance.invoice.update()
+
+    try:
+        instance.invoice.update()
+    except Invoice.DoesNotExist:
+        pass
 
 post_delete.connect(update_invoice_handler, sender=Membership)
 post_save.connect(update_invoice_handler, sender=Membership)
@@ -271,6 +275,8 @@ def delete_membership_on_event_signoff(sender, **kwargs):
         membership.delete()
 
     except Membership.DoesNotExist:
+        pass
+    except Invoice.DoesNotExist:
         pass
 
 post_delete.connect(delete_membership_on_event_signoff, sender=Attend)

@@ -1,5 +1,5 @@
 from django.template.defaultfilters import slugify
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.db import models
 
 from selvbetjening.core.events.models import Event, Attend, AttendState, Group
@@ -102,20 +102,6 @@ def refresh():
 
             award.timestamp = attend.event.startdate
             award.save()
-
-def attendance_deleted_handler(sender, **kwargs):
-    attend = kwargs['instance']
-
-    try:
-        relation = EventAttendanceAchievement.objects.get(event__pk=attend.event.pk)
-        achievement = relation.achievement
-
-        Award.objects.filter(achievement=achievement, user=attend.user).delete()
-        
-    except EventAttendanceAchievement.DoesNotExist:
-        pass
-
-post_delete.connect(attendance_deleted_handler, sender=Attend)
 
 def attendance_changed_handler(sender, **kwargs):
     attend = kwargs['instance']
