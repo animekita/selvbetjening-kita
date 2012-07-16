@@ -1,13 +1,12 @@
-from django.conf import settings
-from django.conf.urls.defaults import *
-from django.views.generic.simple import redirect_to, direct_to_template
-from django.core.urlresolvers import reverse
+from django.conf.urls import *
 
 from selvbetjening.portal.profile.views import profile_redirect
 from selvbetjening.sadmin.base import sadmin
 
 from kita_website.apps.kitamembership.views import profile_membershipstatus
 from kita_website.apps.achievements.views import list_achievements
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 # workaround for missing urls
 from selvbetjening.sadmin.events import models as event_models
@@ -28,11 +27,7 @@ urlpatterns = patterns('',
 
     (r'^sadmin/', include(sadmin.site.urls)),
 
-#    (r'^scheckin/legacy/', include('selvbetjening.scheckin.legacy.urls')),
+    (r'^scheckin/legacy/', include('selvbetjening.scheckin.legacy.urls')),
 )
 
-if getattr(settings, 'STATIC_DEBUG', False):
-    urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': settings.STATIC_ROOT}),
-    )
+urlpatterns += staticfiles_urlpatterns()
