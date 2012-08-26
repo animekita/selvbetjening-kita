@@ -1,37 +1,10 @@
 from django.template.loader import render_to_string
-from django.contrib.admin.helpers import AdminForm
 
-from selvbetjening.core.members.processor_handlers import user_migration_processors
 from selvbetjening.core.events.processor_handlers import change_selection_processors, checkin_processors
 from selvbetjening.portal.eventregistration.processor_handlers import signup_processors, change_processors
 
 from forms import MembershipForm
 import models
-
-class UserMigrationProcessor(object):
-    template_name = 'kitamembership/processors/user_migration.html'
-
-    def __init__(self, request, old_user, new_user):
-        self.request = request
-        self.old_user = old_user
-        self.new_user = new_user
-
-        self.memberships = models.Membership.objects.filter(user=self.old_user)
-
-    def is_valid(self):
-        return True
-
-    def render_function(self):
-        return render_to_string(self.template_name,
-                                {'count': self.memberships.count()})
-
-
-    def migrate(self):
-        for membership in self.memberships:
-            membership.user = self.new_user
-            membership.save()
-
-user_migration_processors.register(UserMigrationProcessor)
 
 class ChangeSelectionProcessor(object):
     def __init__(self, request, attendee):

@@ -5,14 +5,14 @@ from django.utils.translation import ugettext as _
 
 from crispy_forms.helpers import FormHelper, Layout
 
-from selvbetjening.viewbase.forms.helpers import Fieldset
+from selvbetjening.viewbase.forms.helpers import SFieldset
 
 import models
 
 class MembershipForm(forms.Form):
     type = forms.ChoiceField(label=_('Payment type'))
 
-    layout = Layout(Fieldset(u'Medlemskab', 'type',
+    layout = Layout(SFieldset(u'Medlemskab', 'type',
                                    help_text=u'For at deltage i dette arrangement skal du betale kontingent. <a href="http://www.anime-kita.dk/bliv-medlem/">Du kan læse mere om vores kontingent og forskellen på fuldt kontingent og første/anden rate betalinger her</a>.'))
 
     helper = FormHelper()
