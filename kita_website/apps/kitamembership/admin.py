@@ -1,15 +1,10 @@
-from django.contrib import admin
-from django.utils.datastructures import SortedDict
+
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 
 from selvbetjening.sadmin.base.sadmin import SBoundModelAdmin, site
 
-from models import Membership, YearlyRate, MembershipState
+from models import Membership
 
 class MembershipAdmin(SBoundModelAdmin):
     class Meta:
