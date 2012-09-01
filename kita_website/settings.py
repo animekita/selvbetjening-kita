@@ -24,6 +24,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.viewbase.forms',
     'selvbetjening.viewbase.googleanalytics',
     'selvbetjening.viewbase.copyright',
+    'selvbetjening.viewbase.branding',
 
     'selvbetjening.portal.quickregistration',
     'selvbetjening.portal.profile',
@@ -39,7 +40,8 @@ INSTALLED_APPS.extend([
     'selvbetjening.sadmin.events',
     'selvbetjening.sadmin.mailcenter',
 
-    'selvbetjening.scheckin.legacy',
+    'selvbetjening.api.rest',
+    'selvbetjening.scheckin',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achievements',
