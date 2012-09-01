@@ -47,7 +47,7 @@ class MembershipAdmin(SBoundModelAdmin):
         # insert reference of this admin into members admin
         from django.conf.urls import patterns, url, include
 
-        from selvbetjening.sadmin.members import models # ensure members admin is instanisated
+        from selvbetjening.sadmin.members import models # ensure members admin is initialized
         user_admin = site.get('members')
         old_get_urls = user_admin.get_urls
         local_urls = self.urls
@@ -62,7 +62,7 @@ class MembershipAdmin(SBoundModelAdmin):
         user_admin.get_urls = overwrite_get_urls
 
         # insert references into members admin
-        self.module_menu = user_admin.object_menu
+        self.sadmin_menu = user_admin.object_menu
         self.page_root.parent = user_admin.page_change
         user_admin.object_menu.register(self.page_root, title=_('Membership'))
 
