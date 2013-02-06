@@ -3,7 +3,8 @@
 from django import forms
 from django.utils.translation import ugettext as _
 
-from crispy_forms.helpers import FormHelper, Layout
+from crispy_forms.layout import Layout
+from crispy_forms.helper import FormHelper
 
 from selvbetjening.viewbase.forms.helpers import SFieldset
 

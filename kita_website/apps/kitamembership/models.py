@@ -299,7 +299,3 @@ class YearlyRate(models.Model):
     def __unicode__(self):
         return _(u"Yearly rate for %s") % self.year
 
-from selvbetjening.sadmin.base.sadmin import site
-from admin import MembershipAdmin
-
-site.register('kita/membership', MembershipAdmin)

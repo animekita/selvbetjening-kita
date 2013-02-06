@@ -8,11 +8,21 @@ from kita_website.apps.achievements.views import list_achievements
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-# workaround for missing urls
-from selvbetjening.sadmin.events import models as event_models
-from selvbetjening.sadmin.mailcenter import models as mail_models
-from selvbetjening.sadmin.members import models as members_models
-from kita_website.apps.achievements import models as achievements_models
+from selvbetjening.sadmin.members.models import MembersRootAdmin
+from selvbetjening.sadmin.events.models import EventsRootAdmin
+from selvbetjening.sadmin.mailcenter.models import MailcenterRootAdmin
+
+sadmin.site.register('members', MembersRootAdmin)
+sadmin.site.register('events', EventsRootAdmin)
+sadmin.site.register('mailcenter', MailcenterRootAdmin)
+
+from kita_website.apps.achievements.models import PositionAdmin
+
+sadmin.site.register('achievements', PositionAdmin)
+
+from kita_website.apps.kitamembership.admin import MembershipAdmin
+
+sadmin.site.register('kita/membership', MembershipAdmin)
 
 urlpatterns = patterns('',
     url(r'^$', profile_redirect, name='home'),

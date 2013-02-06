@@ -6,6 +6,7 @@ from selvbetjening.sadmin.base.sadmin import SBoundModelAdmin, site
 
 from models import Membership
 
+
 class MembershipAdmin(SBoundModelAdmin):
     class Meta:
         app_name = 'kitamembership'

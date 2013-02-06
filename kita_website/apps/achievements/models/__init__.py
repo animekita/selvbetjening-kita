@@ -22,4 +22,3 @@ refresh_achievements_handlers = [event_attendance.refresh,
 from selvbetjening.sadmin.base.sadmin import site
 from kita_website.apps.achievements.admin import PositionAdmin
 
-site.register('achievements', PositionAdmin)
