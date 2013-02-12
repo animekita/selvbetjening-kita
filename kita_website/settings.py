@@ -41,6 +41,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.sadmin.mailcenter',
 
     'selvbetjening.api.rest',
+    'selvbetjening.api.sso',
     'selvbetjening.scheckin',
 
     'kita_website.apps.kitamembership',

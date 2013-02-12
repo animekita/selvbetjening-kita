@@ -38,7 +38,9 @@ urlpatterns = patterns('',
     (r'^sadmin/', include(sadmin.site.urls)),
 
     (r'^api/rest/', include('selvbetjening.api.rest.urls')),
+    (r'^api/sso/', include('selvbetjening.api.sso.urls')),
     (r'^scheckin/', include('selvbetjening.scheckin.urls')),
+
 )
 
 urlpatterns += staticfiles_urlpatterns()
