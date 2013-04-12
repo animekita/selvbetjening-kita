@@ -45,13 +45,13 @@
 			<div id="topUserNav">
 				<!-- This is why whitespaces inside block elements shouldn't be parsed -->
 				{% if user.is_authenticated %}
-				<a class="floatLeft" href="{% url members_profile %}">se din profil</a
+				<a class="floatLeft" href="{% url "members_profile" %}">se din profil</a
 				><span class="vertSeperatorTiny">|</span
-				><a href="{% url members_logout %}">Log ud</a>
+				><a href="{% url "members_logout" %}">Log ud</a>
 				{% else %}
-				<a class="floatLeft" href="{% url quickregistration_register %}">Opret Bruger</a
+				<a class="floatLeft" href="{% url "quickregistration_register" %}">Opret Bruger</a
 				><span class="vertSeperatorTiny">|</span
-				><a href="{% url members_login %}">Log ind</a>
+				><a href="{% url "members_login" %}">Log ind</a>
 				{% endif %}
 			</div>
 
@@ -74,31 +74,31 @@
 				{% if user.is_authenticated %}
 				<h2>Din bruger</h2>
 				<ul class="leftNav">
-					<li><a href="{% url members_profile %}">Profil</a></li>
-					<li><a href="{% url kita_membership %}">Kontingent</a></li>
-					<li><a href="{% url members_current_events %}">Arrangementer</a></li>
+					<li><a href="{% url "members_profile" %}">Profil</a></li>
+					<li><a href="{% url "kita_membership" %}">Kontingent</a></li>
+					<li><a href="{% url "members_current_events" %}">Arrangementer</a></li>
 				</ul>
 
 				<h2>Opdater</h2>
 				<ul class="leftNav">
-					<li><a href="{% url members_editprofile %}">Personoplysninger</a></li>
-					<li><a href="{% url members_editprivacy %}">Privacy</a></li>
-					<li><a href="{% url members_editpicture %}">Billede</a></li>
-					<li><a href="{% url members_username_change %}">Brugernavn</a></li>
-					<li><a href="{% url members_password_change %}">Kodeord</a></li>
+					<li><a href="{% url "members_editprofile" %}">Personoplysninger</a></li>
+					<li><a href="{% url "members_editprivacy" %}">Privacy</a></li>
+					<li><a href="{% url "members_editpicture" %}">Billede</a></li>
+					<li><a href="{% url "members_username_change" %}">Brugernavn</a></li>
+					<li><a href="{% url "members_password_change" %}">Kodeord</a></li>
 				</ul>
 
 				{% comment %}
 				<h2>Forum</h2>
 				<ul class="leftNav">
-					<li><a href="{% url vanillaforum_editpicture %}">Billede</a></li>
-					<li><a href="{% url vanillaforum_editnotifications %}">Notifikationer</a></li>
+					<li><a href="{% url "vanillaforum_editpicture" %}">Billede</a></li>
+					<li><a href="{% url "vanillaforum_editnotifications" %}">Notifikationer</a></li>
 				</ul>
 				{% endcomment %}
 				
 				{% else %}
 				<ul class="leftNav">
-					<li><a href="{% url quickregistration_register %}"></a></li>
+					<li><a href="{% url "quickregistration_register" %}"></a></li>
 				</ul>
 				{% endif %}
 

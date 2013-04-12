@@ -2,7 +2,7 @@
 
 <h2>Achievements</h2>
 
-<p>Du har <b>{{awards.count}}</b> achievements. <a href="{% url kita_list_achievements %}">Se alle achievements</a>.</p>
+<p>Du har <b>{{awards.count}}</b> achievements. <a href="{% url "kita_list_achievements" %}">Se alle achievements</a>.</p>
 
 {% for award in awards %}
 {% if not award.achievement.group.slug == 'general' %}

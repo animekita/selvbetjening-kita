@@ -282,13 +282,12 @@ def delete_membership_on_event_signoff(sender, **kwargs):
 post_delete.connect(delete_membership_on_event_signoff, sender=Attend)
 
 def update_invoice_with_membership_handler(sender, **kwargs):
-    invoice_revision = kwargs['invoice_revision']
-    invoice = invoice_revision.invoice
+    invoice = kwargs['invoice']
 
     for membership in Membership.objects.filter(invoice=invoice):
-        invoice_revision.add_line(description=unicode(membership),
-                                  price=membership.price,
-                                  managed=True)
+        invoice.add_line(description=unicode(membership),
+                         price=membership.price,
+                         managed=True)
 
 populate_invoice.connect(update_invoice_with_membership_handler)
 

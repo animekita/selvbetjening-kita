@@ -1,7 +1,7 @@
 {% extends "site.html" %}
 
 {% block breadcrumbs %}
-<li><a href="{% url home %}">Forsiden</a></li>
+<li><a href="{% url "home" %}">Forsiden</a></li>
 {% endblock %}
 
 {% block contenthead %}
@@ -16,13 +16,13 @@
 
 <ul>
     <li><a href="#"></a></li>
-    <li><a href="{% url quickregistration_register %}">Bliv medlem</a></li>
+    <li><a href="{% url "quickregistration_register" %}">Bliv medlem</a></li>
 </ul>
 
 <h3>Arrangementer</h3>
 
 <ul>
-    <li><a href="{% url events_view_all %}">Se alle vores tidligere arrangementer</a></li>
+    <li><a href="{% url "events_view_all" %}">Se alle vores tidligere arrangementer</a></li>
 </ul>
 
 {% endblock %}

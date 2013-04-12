@@ -27,7 +27,7 @@ class PositionAdmin(SModelAdmin):
         main_menu.register(self.page_root, 'Achievements')
 
     def get_urls(self):
-        from django.conf.urls.defaults import patterns, url, include
+        from django.conf.urls import patterns, url, include
 
         tournament_admin = TournamentAdmin()
         tournament_admin.module_menu = self.module_menu

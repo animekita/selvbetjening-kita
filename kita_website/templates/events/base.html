@@ -6,8 +6,8 @@
 <h2>Arrangement</h2>
 
 	<ul class="leftNav">
-		<li><a href="{% url eventregistration_information event.pk %}">Information</a></li>
-		<li><a href="{% url eventregistration_attendees event.pk %}">Tilmeldte</a></li>
+		<li><a href="{% url "eventregistration_information" event.pk %}">Information</a></li>
+		<li><a href="{% url "eventregistration_attendees" event.pk %}">Tilmeldte</a></li>
 	</ul>
 
 
@@ -15,7 +15,7 @@
 
 <h2>Din tilmelding</h2>
 	<ul class="leftNav">
-		<li><b><a href="{% url eventregistration_signup event.pk %}">Tilmeld dig</a></b></li>
+		<li><b><a href="{% url "eventregistration_signup" event.pk %}">Tilmeld dig</a></b></li>
 	</ul>
 
 {% endif %}
@@ -24,11 +24,11 @@
 
 <h2>Din tilmelding</h2>
 	<ul class="leftNav">
-		<li><a href="{% url eventregistration_status event.pk %}">Tilmelding status</a></li>
+		<li><a href="{% url "eventregistration_status" event.pk %}">Tilmelding status</a></li>
 		{% if event.has_options %}
-		<li><a href="{% url eventregistration_change_options event.pk %}">Ændre tilmelding</a></li>
+		<li><a href="{% url "eventregistration_change_options" event.pk %}">Ændre tilmelding</a></li>
 		{% endif %}
-		<li><a href="{% url eventregistration_signoff event.pk %}">Fjern tilmelding</a></li>
+		<li><a href="{% url "eventregistration_signoff" event.pk %}">Fjern tilmelding</a></li>
 	</ul>
 
 {% endif %}
