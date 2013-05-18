@@ -1,5 +1,5 @@
 import MySQLdb
-import md5
+import hashlib
 
 from django.conf import settings
 from django.db.models.signals import post_save
@@ -19,7 +19,7 @@ class VanillaForum:
                                   charset='utf8')
 
     def prepare_password_for_forum(self, password):
-        return md5.new(password.encode('utf-8')).hexdigest()
+        return hashlib.md5.new(password.encode('utf-8')).hexdigest()
 
     def userExists(self, username):
         cursor = self.db.cursor()
@@ -30,7 +30,7 @@ class VanillaForum:
 
     def authenticateUser(self, username, password):
         cursor = self.db.cursor()
-        cursor.execute("SELECT Name FROM LUM_User where Name=%s AND Password=%s", (username, md5.new(password.encode('utf-8')).hexdigest()))
+        cursor.execute("SELECT Name FROM LUM_User where Name=%s AND Password=%s", (username, hashlib.md5.new(password.encode('utf-8')).hexdigest()))
         result = cursor.fetchone()
         cursor.close()
 
@@ -69,7 +69,7 @@ class VanillaForum:
     def updateUser(self, OldUsername, Username, Password, Email, FirstName, LastName):
         cursor = self.db.cursor()
         cursor.execute("UPDATE LUM_User SET Name=%s, Password=%s, Email=%s, FirstName=%s, LastName=%s WHERE Name=%s",
-                       (Username, md5.new(Password.encode('utf-8')).hexdigest(), Email, FirstName, LastName, OldUsername))
+                       (Username, hashlib.md5.new(Password.encode('utf-8')).hexdigest(), Email, FirstName, LastName, OldUsername))
         cursor.close()
 
     def changeUserEmail(self, username, email):
@@ -78,7 +78,7 @@ class VanillaForum:
         cursor.close()
 
     def changeUserPassword(self, username, password):
-        passwd = md5.new(password.encode('utf-8'))
+        passwd = hashlib.md5.new(password.encode('utf-8'))
 
         cursor = self.db.cursor()
         cursor.execute("UPDATE LUM_User SET Password=%s WHERE Name=%s", (passwd.hexdigest(), username))

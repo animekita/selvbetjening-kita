@@ -20,6 +20,10 @@ from kita_website.apps.achievements.models import PositionAdmin
 
 sadmin.site.register('achievements', PositionAdmin)
 
+from kita_website.apps.webfactionemail.admin import EmailAdmin
+
+sadmin.site.register('webfaction', EmailAdmin)
+
 from kita_website.apps.kitamembership.admin import MembershipAdmin
 
 sadmin.site.register('kita/membership', MembershipAdmin)

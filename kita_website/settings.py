@@ -47,6 +47,7 @@ INSTALLED_APPS.extend([
     'kita_website.apps.kitamembership',
     'kita_website.apps.achievements',
     'kita_website.apps.vanillaforum',
+    'kita_website.apps.webfactionemail'
 ])
 
 # import localsettings, a per deployment configuration file
