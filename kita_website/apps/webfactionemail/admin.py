@@ -32,7 +32,7 @@ class EmailAdmin(SModelAdmin):
         return ', '.join([user.username for user in User.objects.filter(groups__in=instance.forwards_group.all())])
 
     list_display = ('email', forwards, groups, 'forwards_other', 'marked_for_deletion')
-    search_fields = ('email', 'forwards', 'forwards_other')
+    search_fields = ('email_prefix', 'forwards', 'forwards_other')
 
     def _init_navigation(self):
         super(EmailAdmin, self)._init_navigation()
