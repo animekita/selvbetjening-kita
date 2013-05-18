@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.core.validators import RegexValidator, validate_email
 
-email_prefix_regex = re.compile('^[a-z]+$')
+email_prefix_regex = re.compile('^[a-z]+[a-z0-9]*$')
 
 
 def reserved_keywords_validator(value):
