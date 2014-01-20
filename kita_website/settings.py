@@ -50,6 +50,8 @@ INSTALLED_APPS.extend([
     'kita_website.apps.webfactionemail'
 ])
 
+POLICY['PORTAL.EVENTREGISTRATION.ENFORCE_ADDRESS_UPDATE'] = True
+
 # import localsettings, a per deployment configuration file
 try:
     from settings_local import *
