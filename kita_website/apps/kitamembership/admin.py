@@ -17,6 +17,8 @@ class MembershipAdmin(SBoundModelAdmin):
         display_name = _(u'Kita Membership')
         display_name_plural = _(u'Kita Memberships')
 
+    list_display_links = ['']
+
     def paid(membership):
         return membership.invoice.is_paid()
     paid.boolean = True
