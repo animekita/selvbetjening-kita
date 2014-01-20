@@ -16,8 +16,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         members = {}
-        at_date = date(2011, 12, 31)
-        bf_date = date(2010, 12, 31)
+        at_date = date(2013, 12, 31)
+        bf_date = date(2012, 12, 31)
 
         fp = codecs.open("report.txt", "w", "utf-8")
 
