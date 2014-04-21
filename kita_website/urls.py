@@ -1,4 +1,5 @@
 from django.conf.urls import *
+from django.conf import settings
 
 from selvbetjening.portal.profile.views import profile_redirect
 from selvbetjening.sadmin.base import sadmin
@@ -41,10 +42,11 @@ urlpatterns = patterns('',
 
     (r'^sadmin/', include(sadmin.site.urls)),
 
-    (r'^api/rest/', include('selvbetjening.api.rest.urls')),
-    (r'^api/sso/', include('selvbetjening.api.sso.urls')),
-    (r'^scheckin/', include('selvbetjening.scheckin.urls')),
+    (r'^api/sso/', include('selvbetjening.api.sso.urls'))
 
 )
 
-urlpatterns += staticfiles_urlpatterns()
+if getattr(settings, 'STATIC_DEBUG', False):
+    urlpatterns += patterns('',
+        (r'^%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve',
+        {'document_root': settings.STATIC_ROOT}))

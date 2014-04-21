@@ -40,9 +40,8 @@ INSTALLED_APPS.extend([
     'selvbetjening.sadmin.events',
     'selvbetjening.sadmin.mailcenter',
 
-    'selvbetjening.api.rest',
+    #'selvbetjening.api.rest',
     'selvbetjening.api.sso',
-    'selvbetjening.scheckin',
 
     'kita_website.apps.kitamembership',
     'kita_website.apps.achievements',
@@ -50,7 +49,7 @@ INSTALLED_APPS.extend([
     'kita_website.apps.webfactionemail'
 ])
 
-POLICY['PORTAL.EVENTREGISTRATION.ENFORCE_ADDRESS_UPDATE'] = True
+#POLICY['PORTAL.EVENTREGISTRATION.ENFORCE_ADDRESS_UPDATE'] = True
 
 # import localsettings, a per deployment configuration file
 try:
