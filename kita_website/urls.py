@@ -21,14 +21,23 @@ urlpatterns = patterns('',
     # /sadmin2/
     (r'^%s/' % settings.SADMIN2_BASE_URL, include('selvbetjening.sadmin2.urls', namespace='sadmin2')),
 
+<<<<<<< HEAD
     # /api/
     (r'^api/rest/', include('selvbetjening.api.rest.urls')),
+=======
+>>>>>>> hotfix/7.9.0
     (r'^api/sso/', include('selvbetjening.api.sso.urls'))
 
 )
 
 if getattr(settings, 'STATIC_DEBUG', False):
+<<<<<<< HEAD
     urlpatterns += patterns(
         '',
         (r'^%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve',
         {'document_root': settings.STATIC_ROOT}))
+=======
+    urlpatterns += patterns('',
+        (r'^%s(?P<path>.*)$' % settings.STATIC_URL, 'django.views.static.serve',
+        {'document_root': settings.STATIC_ROOT}))
+>>>>>>> hotfix/7.9.0
