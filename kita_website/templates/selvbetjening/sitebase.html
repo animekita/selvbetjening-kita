@@ -45,26 +45,20 @@
 			<div id="topUserNav">
 				<!-- This is why whitespaces inside block elements shouldn't be parsed -->
 				{% if user.is_authenticated %}
-				<a class="floatLeft" href="{% url "members_profile" %}">se din profil</a
+				<a class="floatLeft" href="{% url "members_profile" %}">Se din profil</a
 				><span class="vertSeperatorTiny">|</span
-				><a href="{% url "members_logout" %}">Log ud</a>
+				><a href="{% url "auth_logout" %}">Log ud</a>
 				{% else %}
-				<a class="floatLeft" href="{% url "quickregistration_register" %}">Opret Bruger</a
+				<a class="floatLeft" href="{% url "userportal_register" %}">Opret Bruger</a
 				><span class="vertSeperatorTiny">|</span
-				><a href="{% url "members_login" %}">Log ind</a>
+				><a href="{% url "auth_login" %}">Log ind</a>
 				{% endif %}
 			</div>
 
 		</div>
 
-		{% block breadcrumb %}
-			{% load breadcrumb_tags %}
-			{% add_crumb 'Selvbetjening' 'home' %}
-		{% endblock %}
-
 		<div id="topContent">
 			<div id="pageControls"></div>
-			{% render_breadcrumbs %}
 		</div>
 
 		<div id="mid">
@@ -97,9 +91,7 @@
 				{% endcomment %}
 				
 				{% else %}
-				<ul class="leftNav">
-					<li><a href="{% url "quickregistration_register" %}"></a></li>
-				</ul>
+
 				{% endif %}
 
 

@@ -12,6 +12,7 @@ from django.db.models.signals import post_delete, post_save
 
 import processors # important, used to register processors
 
+
 class MembershipState(object):
     INACTIVE = 'INACTIVE'
     PASSIVE = 'PASSIVE'
@@ -36,6 +37,7 @@ class MembershipState(object):
 
         return unicode(names.get(membership_state, membership_state))
 
+
 class MembershipType(object):
     FULL = 'FULL'
     FRATE = 'FRATE'
@@ -52,6 +54,7 @@ class MembershipType(object):
     def get_display_name(cls, membership_type):
 
         return unicode(cls.names.get(membership_type, membership_type))
+
 
 class MembershipManager(models.Manager):
     def get_membership_state(self, user, event=None, handle_as_paid_invoice=None, handle_as_unpaid_invoice=None, at_date=None):
@@ -207,6 +210,7 @@ class MembershipManager(models.Manager):
     def total_quaters(self, timestamp):
         return timestamp.year * 4 + self.to_quarter(timestamp)
 
+
 class Membership(models.Model):
     """
     Two types of payments can be used, full (one time) payment or rate
@@ -256,6 +260,7 @@ class Membership(models.Model):
     def __unicode__(self):
         return unicode(MembershipType.get_display_name(self.membership_type))
 
+
 def update_invoice_handler(sender, **kwargs):
     instance = kwargs['instance']
 
@@ -266,6 +271,7 @@ def update_invoice_handler(sender, **kwargs):
 
 post_delete.connect(update_invoice_handler, sender=Membership)
 post_save.connect(update_invoice_handler, sender=Membership)
+
 
 def delete_membership_on_event_signoff(sender, **kwargs):
     instance = kwargs['instance']
@@ -281,6 +287,7 @@ def delete_membership_on_event_signoff(sender, **kwargs):
 
 post_delete.connect(delete_membership_on_event_signoff, sender=Attend)
 
+
 def update_invoice_with_membership_handler(sender, **kwargs):
     invoice = kwargs['invoice']
 
@@ -290,6 +297,7 @@ def update_invoice_with_membership_handler(sender, **kwargs):
                          managed=True)
 
 populate_invoice.connect(update_invoice_with_membership_handler)
+
 
 class YearlyRate(models.Model):
     year = models.IntegerField(max_length=4)
