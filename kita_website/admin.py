@@ -27,7 +27,6 @@ site.replace(User, UserAdmin)
 # continue initialization
 
 import selvbetjening.core.events.admin
-import selvbetjening.core.invoice.admin
 import selvbetjening.core.logger.admin
 
 import selvbetjening.core.mailcenter.admin

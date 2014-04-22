@@ -4,17 +4,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Anime kita - nordjyllands forening for japansk populærkultur</title>
-		<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+
+        <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/cms.css" />
 
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}contrib/bootstrap/css/bootstrap.min.css" media="screen, projection" />
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}contrib/datepicker/css/datepicker.css" media="screen, projection" />
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.selvbetjening.css" media="screen, projection" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}contrib/bootstrap-3.1/css/bootstrap.min.css" media="screen, projection" />
 
-        <script src="{{ STATIC_URL }}contrib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}contrib/datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}contrib/jquery-2.1/jquery-2.1.0.min.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}contrib/bootstrap-3.1/js/bootstrap.min.js" type="text/javascript"></script>
 
         {% block extrastyle %}{% endblock %}
 
@@ -44,12 +43,12 @@
 
 			<div id="topUserNav">
 				<!-- This is why whitespaces inside block elements shouldn't be parsed -->
-				{% if user.is_authenticated %}
-				<a class="floatLeft" href="{% url "members_profile" %}">Se din profil</a
+				{% if request.user.is_authenticated %}
+				<a class="floatLeft" href="{% url "userportal_profile" %}">{{ request.user.username }}</a
 				><span class="vertSeperatorTiny">|</span
 				><a href="{% url "auth_logout" %}">Log ud</a>
 				{% else %}
-				<a class="floatLeft" href="{% url "userportal_register" %}">Opret Bruger</a
+				<a class="floatLeft" href="{% url "userportal_register" %}">Opret bruger</a
 				><span class="vertSeperatorTiny">|</span
 				><a href="{% url "auth_login" %}">Log ind</a>
 				{% endif %}
@@ -62,59 +61,17 @@
 		</div>
 
 		<div id="mid">
-			<div id="midLeft">
-				{% block navigation %}
 
-				{% if user.is_authenticated %}
-				<h2>Din bruger</h2>
-				<ul class="leftNav">
-					<li><a href="{% url "members_profile" %}">Profil</a></li>
-					<li><a href="{% url "kita_membership" %}">Kontingent</a></li>
-					<li><a href="{% url "members_current_events" %}">Arrangementer</a></li>
-				</ul>
+            {% block outercontent %}
+                <div id="midContent" style="width: 800px;">
+                    <h1 class="title">{% block contenthead %}{% endblock %}</h1>
 
-				<h2>Opdater</h2>
-				<ul class="leftNav">
-					<li><a href="{% url "members_editprofile" %}">Personoplysninger</a></li>
-					<li><a href="{% url "members_editprivacy" %}">Privacy</a></li>
-					<li><a href="{% url "members_editpicture" %}">Billede</a></li>
-					<li><a href="{% url "members_username_change" %}">Brugernavn</a></li>
-					<li><a href="{% url "members_password_change" %}">Kodeord</a></li>
-				</ul>
+                    {% include "base/parts/messages.html" %}
 
-				{% comment %}
-				<h2>Forum</h2>
-				<ul class="leftNav">
-					<li><a href="{% url "vanillaforum_editpicture" %}">Billede</a></li>
-					<li><a href="{% url "vanillaforum_editnotifications" %}">Notifikationer</a></li>
-				</ul>
-				{% endcomment %}
-				
-				{% else %}
+                    {% block content %}{% endblock %}
+                </div>
+            {% endblock %}
 
-				{% endif %}
-
-
-
-				{% endblock %}
-
-				<div id="kitaKanji"></div>
-			</div>
-
-			<div id="midContent">
-				<h1 class="title">{% block contenthead %}{% endblock %}</h1>
-
-				{% if messages or session_message %}
-					{% for message in messages %}
-					<p class="alert alert-info">{{ message }}</p>
-					{% endfor %}
-					{% if session_message %}
-					<p class="alert alert-info">{{session_message}}</p>
-					{% endif %}
-				{% endif %}
-
-				{% block content %}{% endblock %}
-			</div>
 		</div>
 
 		<div id="footerFix"></div>
@@ -124,7 +81,7 @@
 		<!-- This is why ... -->
 		<span>Anime Kita, {% copyright_time 2007 %} &copy; All rights reserved</span
 		><span class="vertSeperatorMedium">|</span
-		<a href="http://www.anime-kita.dk/om-os/kontakt/">Kontakt</a
+		><a href="http://www.anime-kita.dk/om-os/kontakt/">Kontakt</a
 		><span class="vertSeperatorMedium">|</span
 		><a href="http://www.anime-kita.dk/databehandlingspolitik/">Databehandlingspolitik</a>
 	</div>
