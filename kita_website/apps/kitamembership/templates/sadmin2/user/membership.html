@@ -1,0 +1,35 @@
+{% extends "sadmin2/site.html" %}
+{% load crispy_forms_tags %}
+{% load kitamembership_translate %}
+
+{% block content %}
+
+<div class="row">
+<div class="col-lg-12">
+    <h2>Kontingent</h2>
+
+    <p><b>Status: </b> {{ membership_state|translate:"membership_state" }}</p>
+
+    <h3>Historik</h3>
+
+    <table class="table">
+
+    <tr>
+        <th></th>
+        <th>Type</th>
+        <th>Paid</th>
+    </tr>
+
+    {% for membership in memberships %}
+    <tr>
+        <td>{{ membership.attendee.event }} ({{ membership.bind_date }})</td>
+        <td>{{ membership.membership_type|translate:"payment_type" }}</td>
+        <td>{{ membership.attendee.is_paid }}</td>
+    </tr>
+    {% endfor %}
+
+    </table>
+</div>
+</div>
+
+{% endblock %}

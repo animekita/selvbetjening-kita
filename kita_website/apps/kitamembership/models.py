@@ -1,10 +1,23 @@
 from datetime import datetime, timedelta
 
 from django.db import models
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-from selvbetjening.core.events.models import Attend
+from selvbetjening.core.events.models import Attend, Option, Selection, AttendeeComment
+from selvbetjening.core.events import options
+from selvbetjening import sadmin2
+from selvbetjening.core.events.options.scope import SCOPE
+from selvbetjening.core.events.options.typemanager import ChoiceTypeManager
+from selvbetjening.core.events.options.widgets import ChoiceWidget
+from selvbetjening.core.events.signals import attendee_updated_signal
+from selvbetjening.sadmin2 import menu
+from selvbetjening.sadmin2.options.forms import option_form_factory
+from selvbetjening.sadmin2.options.stypemanager import SBaseTypeManager
+
+MEMBERSHIP_OPTION_TYPE_ID = 'kitamembership'
 
 
 class MembershipState(object):
@@ -46,8 +59,25 @@ class MembershipType(object):
 
     @classmethod
     def get_display_name(cls, membership_type):
-
         return unicode(cls.names.get(membership_type, membership_type))
+
+    @classmethod
+    def reverse(cls, label):
+        """
+         My eyes!
+        """
+        for key, name in cls.names.items():
+            if name == label:
+                return key
+
+        raise ValueError
+
+
+_membership_prices = {
+    MembershipType.FULL: 100,
+    MembershipType.SRATE: 50,
+    MembershipType.FRATE: 50
+}
 
 
 class MembershipManager(models.Manager):
@@ -71,6 +101,9 @@ class MembershipManager(models.Manager):
                              fake_upgrade_attendance_as_full=None,
                              fake_attendance_paid=None):
 
+        if fake_upgrade_attendance_as_full is not None:
+            fake_upgrade_attendance_as_full = fake_upgrade_attendance_as_full.pk
+
         memberships = self.get_recent_memberships(user, at_date, fake_attendance_paid)
 
         if len(memberships) == 0:
@@ -90,7 +123,7 @@ class MembershipManager(models.Manager):
             return MembershipState.PASSIVE
         elif memberships[0].membership_type == 'FULL' or \
                 memberships[0].membership_type == 'SRATE' or\
-                memberships[0].attend == fake_upgrade_attendance_as_full:
+                memberships[0].attendee.pk == fake_upgrade_attendance_as_full:
 
             return MembershipState.ACTIVE
         else:
@@ -177,6 +210,9 @@ class MembershipManager(models.Manager):
     def total_quaters(self, timestamp):
         return timestamp.year * 4 + self.to_quarter(timestamp)
 
+    def get_membership_price(self, membership_type):
+        return _membership_prices[membership_type]
+
 
 class Membership(models.Model):
     """
@@ -204,32 +240,118 @@ class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(u'user'))
     attendee = models.ForeignKey(Attend)
 
-    bind_date = models.DateTimeField()
+    bind_date = models.DateField()
     membership_type = models.CharField(max_length=5, choices=[(key, MembershipType.get_display_name(key)) for key in MembershipType.names])
 
     objects = MembershipManager()
 
     @property
     def price(self):
-        try:
-            yearly_rate = YearlyRate.objects.get(year=self.bind_date.year)
-            rate = yearly_rate.rate
-        except YearlyRate.DoesNotExist:
-            rate = 0
-
-        if self.membership_type == 'FULL':
-            return rate
-        else:
-            return rate / 2
+        return self.objects.get_membership_price(self.membership_type)
 
     def __unicode__(self):
         return unicode(MembershipType.get_display_name(self.membership_type))
 
 
-class YearlyRate(models.Model):
-    year = models.IntegerField(max_length=4)
-    rate = models.DecimalField(max_digits=6, decimal_places=2)
+### Signal handling
 
-    def __unicode__(self):
-        return _(u"Yearly rate for %s") % self.year
+@receiver(post_delete, sender=Selection)
+def selection_delete_handler(sender, **kwargs):
+    instance = kwargs['instance']
 
+    if instance.option.type == MEMBERSHIP_OPTION_TYPE_ID:
+        Membership.objects.filter(attendee=instance.attendee).delete()
+
+
+@receiver(post_save, sender=Selection)
+def selection_save_handler(sender, **kwargs):
+    instance = kwargs['instance']
+
+    if instance.option.type == MEMBERSHIP_OPTION_TYPE_ID:
+
+        membership_type = MembershipType.reverse(instance.suboption.name)
+
+        membership, created = Membership.objects.get_or_create(
+            attendee=instance.attendee,
+            defaults={
+                'user': instance.attendee.user,
+                'bind_date': instance.attendee.event.startdate,
+                'membership_type': membership_type
+            })
+
+        if not created and membership.membership_type != membership_type:
+            membership.membership_type = membership_type
+            membership.save()
+
+
+@receiver(attendee_updated_signal)
+def attendee_update_handler(sender, **kwargs):
+    attendee = kwargs['attendee']
+
+    state = Membership.objects.get_membership_state(attendee.user, attendee.event.startdate,
+                                                    fake_upgrade_attendance_as_full=attendee)
+
+    if state == MembershipState.ACTIVE:
+        AttendeeComment.objects.filter(attendee=attendee, author='system.kitamembership').delete()
+    else:
+        AttendeeComment.objects.get_or_create(
+            attendee=attendee,
+            author='system.kitamembership',
+            defaults={
+                'check_in_announce': True,
+                'comment': 'Denne bruger har ikke betalt kontingent.'
+            }
+        )
+
+### Membership choice widget
+
+
+class MembershipChoiceWidget(ChoiceWidget):
+
+    def update_choices(self, user, attendee):
+
+        membership_choices = Membership.objects.get_membership_choices(user, self.option.group.event)
+        price_label_pairs = [(Membership.objects.get_membership_price(choice), MembershipType.get_display_name(choice)) for choice in membership_choices]
+
+        self.choices = self._get_or_create_choices(price_label_pairs,
+                                                   default_label="Du er allerede medlem" if len(price_label_pairs) == 0 else "---")
+
+
+class MembershipTypeManager(ChoiceTypeManager):
+
+    @staticmethod
+    def get_widget(scope, option):
+        if scope == SCOPE.SADMIN:
+            return MembershipChoiceWidget(scope, option)
+        else:
+            return MembershipChoiceWidget(scope, option, send_notifications=True)
+
+
+options.register_custom_type(MEMBERSHIP_OPTION_TYPE_ID, 'Kontingent', MembershipTypeManager)
+sadmin2.register_custom_stype(MEMBERSHIP_OPTION_TYPE_ID,
+                              SBaseTypeManager(MEMBERSHIP_OPTION_TYPE_ID,
+                                               create_form=option_form_factory(
+                                                   Option,
+                                                   ('name', 'description', 'required', 'depends_on', 'notify_on_selection'),
+                                                   ('name', 'type', 'description', 'required', 'depends_on', 'notify_on_selection'),
+                                                   MEMBERSHIP_OPTION_TYPE_ID),
+                                               update_form=option_form_factory(
+                                                    Option,
+                                                    ('name', 'description', 'required', 'depends_on', 'notify_on_selection'),
+                                                    ('name', 'type', 'description', 'required', 'depends_on', 'notify_on_selection'),
+                                                    MEMBERSHIP_OPTION_TYPE_ID)
+                              ))
+
+### Sadmin2 membership overview
+
+menu.sadmin2_menu_tab_user.append({
+    'id': 'membership',
+    'name': _('Membership'),
+    'url_callback': menu.url_callback('kita_membership_sadmin2', ('user_pk', ))
+})
+
+menu.breadcrumbs['user_membership'] = {
+    'name': _('Membership'),
+    'url_callback': menu.url_callback('kita_membership_sadmin2', ('user_pk',)),
+    'parent': 'user'
+}

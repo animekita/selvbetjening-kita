@@ -14,10 +14,14 @@ urlpatterns = patterns('',
 
     # event related
 
+    (r'^events/', include('selvbetjening.frontend.eventsingle.urls')),
     (r'^events/', include('selvbetjening.frontend.eventportal.urls')),
 
     # /sadmin2/
 
+    url(r'^sadmin2/users/(?P<user_pk>[0-9a-zA-Z_\-]+)/membership/$',
+        'kita_website.apps.kitamembership.views.sadmin2_membershipstatus',
+        name='kita_membership_sadmin2'),
     (r'^%s/' % settings.SADMIN2_BASE_URL, include('selvbetjening.sadmin2.urls', namespace='sadmin2')),
 
     # /api/
