@@ -10,6 +10,7 @@ from selvbetjening.viewbase.forms.helpers import SFieldset
 
 import models
 
+
 class MembershipForm(forms.Form):
     type = forms.ChoiceField(label=_('Payment type'))
 
@@ -36,8 +37,7 @@ class MembershipForm(forms.Form):
 
         if membership_choices is None:
             membership_choices = models.Membership.objects.get_membership_choices(self.user,
-                                                                                  self.event,
-                                                                                  self.invoice)
+                                                                                  self.event)
 
         if models.MembershipType.SRATE in membership_choices:
             description = _('Second rate payment description')
@@ -52,7 +52,7 @@ class MembershipForm(forms.Form):
         self.Meta = Meta
 
         if self.attendee is not None:
-            kwargs['initial'] = {'type' : models.Membership.objects.get_membership(self.user, self.attendee.invoice)}
+            kwargs['initial'] = {'type': models.Membership.objects.get_membership(self.user, self.attendee.invoice)}
 
         super(MembershipForm, self).__init__(*args, **kwargs)
 
@@ -88,4 +88,4 @@ class MembershipForm(forms.Form):
                       .delete()
 
         elif self.has_options():
-            models.Membership.objects.select_membership(self.user, self.cleaned_data['type'], event=self.event, invoice=invoice)
+            models.Membership.objects.select_membership(self.attendee, self.cleaned_data['type'])

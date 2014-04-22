@@ -2,15 +2,9 @@ from datetime import datetime, timedelta
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from django.conf import settings
 
-from selvbetjening.core.invoice.models import Invoice
-from selvbetjening.core.invoice.signals import populate_invoice
-from selvbetjening.core.events.models import Event, Attend
-
-from django.db.models.signals import post_delete, post_save
-
-import processors # important, used to register processors
+from selvbetjening.core.events.models import Attend
 
 
 class MembershipState(object):
@@ -21,19 +15,19 @@ class MembershipState(object):
 
     @staticmethod
     def get_display_name(membership_state):
-        names = {'INACTIVE' : _('Inactive member'),
-                 'PASSIVE' : _('Passive member'),
-                 'CONDITIONAL_ACTIVE' : _('Conditional active member'),
-                 'ACTIVE' : _('Active member')}
+        names = {'INACTIVE': _('Inactive member'),
+                 'PASSIVE': _('Passive member'),
+                 'CONDITIONAL_ACTIVE': _('Conditional active member'),
+                 'ACTIVE': _('Active member')}
 
         return unicode(names.get(membership_state, membership_state))
 
     @staticmethod
     def get_display_name_short(membership_state):
-        names = {'INACTIVE' : _('Inactive'),
-                 'PASSIVE' : _('Passive'),
-                 'CONDITIONAL_ACTIVE' : _('Conditional active'),
-                 'ACTIVE' : _('Active')}
+        names = {'INACTIVE': _('Inactive'),
+                 'PASSIVE': _('Passive'),
+                 'CONDITIONAL_ACTIVE': _('Conditional active'),
+                 'ACTIVE': _('Active')}
 
         return unicode(names.get(membership_state, membership_state))
 
@@ -45,10 +39,10 @@ class MembershipType(object):
 
     NONE = 'NONE'
 
-    names = {'FULL' : _('Full payment'),
-             'FRATE' : _('First rate'),
-             'SRATE' : _('Second rate'),
-             'NONE' : _('No membership payment')}
+    names = {'FULL': _('Full payment'),
+             'FRATE': _('First rate'),
+             'SRATE': _('Second rate'),
+             'NONE': _('No membership payment')}
 
     @classmethod
     def get_display_name(cls, membership_type):
@@ -57,29 +51,27 @@ class MembershipType(object):
 
 
 class MembershipManager(models.Manager):
-    def get_membership_state(self, user, event=None, handle_as_paid_invoice=None, handle_as_unpaid_invoice=None, at_date=None):
-        """
-        If event is provided, then first rate payments made to that event
-        will be reported as if the user had made a full payment or second
-        payment (such that events in which the payment were made can get
-        users reported as full members.
 
-        """
-
-        if at_date is None:
-            at_date = datetime.now()
-
-        if handle_as_paid_invoice is None:
-            handle_as_paid_invoice = []
-
-        if handle_as_unpaid_invoice is None:
-            handle_as_unpaid_invoice = []
+    def get_recent_memberships(self, user, at_date,
+                               fake_attendance_paid=None):
 
         memberships = []
-        for membership in Membership.objects.filter(user=user).filter(bind_date__lt=at_date).order_by('-bind_date'):
-            if membership.invoice not in handle_as_unpaid_invoice and \
-               (membership.invoice.is_paid() or membership.invoice in handle_as_paid_invoice):
+        for membership in Membership.objects\
+                .filter(user=user)\
+                .filter(bind_date__lte=at_date)\
+                .order_by('-bind_date')\
+                .select_related():
+
+            if membership.attendee.is_paid() or membership.attendee == fake_attendance_paid:
                 memberships.append(membership)
+
+        return memberships
+
+    def get_membership_state(self, user, at_date,
+                             fake_upgrade_attendance_as_full=None,
+                             fake_attendance_paid=None):
+
+        memberships = self.get_recent_memberships(user, at_date, fake_attendance_paid)
 
         if len(memberships) == 0:
             return MembershipState.INACTIVE
@@ -90,33 +82,23 @@ class MembershipManager(models.Manager):
             last = memberships[0]
 
         payment_quater = self.total_quaters(last.bind_date)
-        date_in_quaters = self.total_quaters(at_date)
+        now_quater = self.total_quaters(at_date)
 
-        if payment_quater + 8 <= date_in_quaters:
+        if payment_quater + 8 <= now_quater:
             return MembershipState.INACTIVE
-        elif payment_quater + 4 <= date_in_quaters:
+        elif payment_quater + 4 <= now_quater:
             return MembershipState.PASSIVE
+        elif memberships[0].membership_type == 'FULL' or \
+                memberships[0].membership_type == 'SRATE' or\
+                memberships[0].attend == fake_upgrade_attendance_as_full:
+
+            return MembershipState.ACTIVE
         else:
-            if memberships[0].membership_type == 'FULL' or memberships[0].membership_type == 'SRATE':
-                return MembershipState.ACTIVE
-            else:
-                if event is not None and memberships[0].event == event:
-                    return MembershipState.ACTIVE
-                else:
-                    return MembershipState.CONDITIONAL_ACTIVE
+            return MembershipState.CONDITIONAL_ACTIVE
 
-    def is_member(self, user, event=None):
-        return self.get_membership_state(user, event) == MembershipState.ACTIVE
+    def get_membership_choices(self, user, event):
 
-    def get_membership_choices(self, user, event=None, invoice=None):
-        if invoice is None:
-            invoice = []
-        else:
-            invoice = [invoice]
-
-        state = self.get_membership_state(user,
-                                          event,
-                                          handle_as_unpaid_invoice=invoice)
+        state = self.get_membership_state(user, event.startdate - timedelta(days=1))
 
         if state == MembershipState.ACTIVE:
             return []
@@ -126,44 +108,24 @@ class MembershipManager(models.Manager):
             return [MembershipType.FULL,
                     MembershipType.FRATE]
 
-    def select_membership(self, user, membership_type, date=None, event=None, invoice=None):
-        assert not (date is not None and event is not None)
+    def select_membership(self, attendee, membership_type):
 
-        if event is not None:
-            date = event.startdate
+        membership, created = Membership.objects.get_or_create(
+            user=attendee.user,
+            bind_date=attendee.event.startdate,
+            attendee=attendee,
+            defaults={
+                'membership_type': membership_type
+            })
 
-        if date is None:
-            date = datetime.now()
-
-        if invoice is not None:
-            try:
-                membership = Membership.objects.get(invoice=invoice)
-
-                membership.membership_type = membership_type
-                membership.save()
-
-                return invoice
-            except Membership.DoesNotExist:
-                pass
-
-        membership = self.create(user=user,
-                                 invoice=invoice,
-                                 event=event,
-                                 membership_type=membership_type,
-                                 bind_date=date)
-
-        return membership.invoice
-
-    def get_membership(self, user, invoice):
-        try:
-            membership = self.get(user=user, invoice=invoice)
-            return membership.membership_type
-        except:
-            return None
+        if not created and membership.membership_type != membership_type:
+            membership.membership_type = membership_type
+            membership.save()
 
     def last_member_period(self, user):
         """ Returns the timestamp marking the beginning of the last user membership period """
-        memberships = Membership.objects.filter(user=user).order_by('-bind_date')
+
+        memberships = self.get_recent_memberships(user, datetime.today())
 
         if len(memberships) == 0:
             return None
@@ -174,6 +136,7 @@ class MembershipManager(models.Manager):
             return memberships[0].bind_date
 
     def member_since(self, user):
+
         last_payment_timestamp = self.last_member_period(user)
 
         if last_payment_timestamp is None:
@@ -187,7 +150,9 @@ class MembershipManager(models.Manager):
             return last_payment_timestamp
 
     def member_to(self, user):
+
         timestamp = self.member_since(user)
+
         if timestamp is not None:
             year = timestamp.year + 1
             month = (self.to_quarter(timestamp) - 1) * 3 + 1
@@ -196,7 +161,9 @@ class MembershipManager(models.Manager):
             return None
 
     def passive_to(self, user):
+
         last_payment_timestamp = self.last_member_period(user)
+
         if last_payment_timestamp is not None:
             year = last_payment_timestamp.year + 2
             month = (self.to_quarter(last_payment_timestamp) - 1) * 3 + 1
@@ -219,20 +186,28 @@ class Membership(models.Model):
     The first rate of the rate payment method is paied at a specific event,
     and the second payment must be paied at the second event. The timestamp
     is used to determine which event the payment is associated to.
-    """
-    user = models.ForeignKey(User, verbose_name=_(u'user'))
-    invoice = models.ForeignKey(Invoice, blank=True)
 
-    event = models.ForeignKey(Event, blank=True, null=True)
+    The system assumes that membership sequences are proper. That is, SRATE is
+    always after a FRATE. Memberships related to unpaid attendees are ignored.
+
+    It is only possible to relate a membership to an attendee at an event. Events
+    are used as fixed points in time were memberships are attached and selected.
+
+    We assume that events are not moved in time (startdate is fixed).
+
+    It is a known problem that memberships can be added for event B (and paid for),
+    but this is not visible when membership status is selected for event A were A
+    happens before B. In this case, we expect the membership to be added to A as usual,
+    and manually changed/canceled for B.
+    """
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(u'user'))
+    attendee = models.ForeignKey(Attend)
 
     bind_date = models.DateTimeField()
-    membership_type = models.CharField(max_length=5, choices=
-        [(key, MembershipType.get_display_name(key)) for key in MembershipType.names])
+    membership_type = models.CharField(max_length=5, choices=[(key, MembershipType.get_display_name(key)) for key in MembershipType.names])
 
     objects = MembershipManager()
-
-    class Meta:
-        unique_together = (('user', 'invoice'),)
 
     @property
     def price(self):
@@ -247,56 +222,8 @@ class Membership(models.Model):
         else:
             return rate / 2
 
-    def save(self, *args, **kwargs):
-
-        try:
-            self.invoice
-        except Invoice.DoesNotExist:
-            self.invoice = Invoice.objects.create(user=self.user,
-                                                  name='Payment')
-
-        return super(Membership, self).save(*args, **kwargs)
-
     def __unicode__(self):
         return unicode(MembershipType.get_display_name(self.membership_type))
-
-
-def update_invoice_handler(sender, **kwargs):
-    instance = kwargs['instance']
-
-    try:
-        instance.invoice.update()
-    except Invoice.DoesNotExist:
-        pass
-
-post_delete.connect(update_invoice_handler, sender=Membership)
-post_save.connect(update_invoice_handler, sender=Membership)
-
-
-def delete_membership_on_event_signoff(sender, **kwargs):
-    instance = kwargs['instance']
-
-    try:
-        membership = Membership.objects.get(invoice=instance.invoice)
-        membership.delete()
-
-    except Membership.DoesNotExist:
-        pass
-    except Invoice.DoesNotExist:
-        pass
-
-post_delete.connect(delete_membership_on_event_signoff, sender=Attend)
-
-
-def update_invoice_with_membership_handler(sender, **kwargs):
-    invoice = kwargs['invoice']
-
-    for membership in Membership.objects.filter(invoice=invoice):
-        invoice.add_line(description=unicode(membership),
-                         price=membership.price,
-                         managed=True)
-
-populate_invoice.connect(update_invoice_with_membership_handler)
 
 
 class YearlyRate(models.Model):

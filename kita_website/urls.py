@@ -1,20 +1,15 @@
 from django.conf.urls import *
 from django.conf import settings
 
-#from selvbetjening.portal.profile.views import profile_redirect
-
 urlpatterns = patterns('',
 
     url(r'^$', 'selvbetjening.frontend.eventportal.views.events_list', name='home'),
 
-    #url(r'^profil/medlemskab/', profile_membershipstatus, name='kita_membership'),
-    #url(r'^profil/achievements/', list_achievements, name='kita_list_achievements'),
-    #(r'^profil/opdater/forum/', include('selvbetjening.notify.vanillaforum.urls')),
-    #(r'^profil/', include('selvbetjening.portal.profile.urls')),
-
     # user related
 
     (r'^auth/', include('selvbetjening.frontend.auth.urls')),
+
+    url(r'^profil/medlemskab/$', 'kita_website.apps.kitamembership.views.profile_membershipstatus', name='kita_membership'),
     (r'^profil/', include('selvbetjening.frontend.userportal.urls')),
 
     # event related

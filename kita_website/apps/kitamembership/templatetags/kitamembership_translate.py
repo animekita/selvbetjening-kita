@@ -1,9 +1,9 @@
 from django import template
-from django.utils.translation import ugettext as _
 
 from kita_website.apps.kitamembership.models import MembershipState, MembershipType
 
 register = template.Library()
+
 
 @register.filter(name='translate')
 def translate(text, category):

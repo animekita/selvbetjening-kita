@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.template.loader import render_to_string
 
 from selvbetjening.core.events.processor_handlers import change_selection_processors, checkin_processors
@@ -6,18 +7,17 @@ from selvbetjening.portal.eventregistration.processor_handlers import signup_pro
 from forms import MembershipForm
 import models
 
+
 class ChangeSelectionProcessor(object):
     def __init__(self, request, attendee):
         self.request = request
         self.attendee = attendee
 
         self.membership_choices = models.Membership.objects.get_membership_choices(user=attendee.user,
-                                                                                   event=attendee.event,
-                                                                                   invoice=attendee.invoice)
+                                                                                   event=attendee.event)
 
         self.previous_state = models.Membership.objects.get_membership_state(attendee.user,
-                                                                             attendee.event,
-                                                                             handle_as_unpaid_invoice=[attendee.invoice])
+                                                                             attendee.event.startdate - timedelta(days=1))
         try:
             self.existing_membership = models.Membership.objects.get(user=attendee.user,
                                                                      event=attendee.event,
@@ -65,18 +65,19 @@ class ChangeSelectionProcessor(object):
 
 change_selection_processors.register(ChangeSelectionProcessor)
 
+
 class CheckinProcessor(object):
     def __init__(self, request, attendee):
         self.request = request
         self.attendee = attendee
 
         self.state = models.Membership.objects.get_membership_state(attendee.user,
-                                                                    attendee.event,
-                                                                    handle_as_paid_invoice=[attendee.invoice])
+                                                                    attendee.event.startdate,
+                                                                    fake_attendance_paid=attendee,
+                                                                    fake_upgrade_attendance_as_full=attendee)
 
         self.previous_state = models.Membership.objects.get_membership_state(attendee.user,
-                                                                             attendee.event,
-                                                                             handle_as_unpaid_invoice=[attendee.invoice])
+                                                                             attendee.event.startdate - timedelta(days=1))
 
     def view(self):
         if self.state is not models.MembershipState.ACTIVE:
@@ -90,6 +91,7 @@ class CheckinProcessor(object):
                                      'previous_state' : self.previous_state})
 
 checkin_processors.register(CheckinProcessor)
+
 
 class SignupOrChangeProcessor(object):
     def __init__(self, request, **kwargs):

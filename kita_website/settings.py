@@ -31,7 +31,7 @@ INSTALLED_APPS.extend([
     'selvbetjening.api.rest',
     'selvbetjening.api.sso',
 
-    #'kita_website.apps.kitamembership',
+    'kita_website.apps.kitamembership',
     #'kita_website.apps.achievements',
     'kita_website.apps.vanillaforum'
 ])
