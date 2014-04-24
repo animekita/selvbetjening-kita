@@ -7,10 +7,6 @@ class Migration:
 
     no_dry_run = True
 
-    depends_on = (
-        ("events", "0013_add_missing_invoices"),
-    )
-
     def forwards(self, orm):
         for membership in orm.Membership.objects.all():
             try:
