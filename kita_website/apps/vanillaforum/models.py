@@ -104,7 +104,7 @@ class VanillaForum:
 def new_user_listner(sender, **kwargs):
     instance = kwargs['instance']
 
-    if settings.FORUM_DATABASE_DISABLED:
+    if getattr(settings, 'FORUM_DATABASE_DISABLED', False):
         return
 
     vanilla_forum = VanillaForum()
@@ -121,7 +121,7 @@ user_created.connect(new_user_listner)
 def change_user_password_listner(sender, **kwargs):
     instance = kwargs['instance']
 
-    if settings.FORUM_DATABASE_DISABLED:
+    if getattr(settings, 'FORUM_DATABASE_DISABLED', False):
         return
 
     vanilla_forum = VanillaForum()
@@ -135,7 +135,7 @@ def change_user_username_listener(sender, **kwargs):
     old_username = kwargs['old_username']
     new_username = kwargs['new_username']
 
-    if settings.FORUM_DATABASE_DISABLED:
+    if getattr(settings, 'FORUM_DATABASE_DISABLED', False):
         return
 
     vanilla_forum = VanillaForum()
