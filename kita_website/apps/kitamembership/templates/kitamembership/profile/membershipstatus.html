@@ -1,12 +1,7 @@
-{% extends "profile/profile.html" %}
+{% extends "userportal/base.html" %}
+{% load kitamembership_translate %}
 
-{% block breadcrumb %}
-    {{ block.super }}
-    {% load breadcrumb_tags %}
-    {% add_crumb 'Dit medlemskab af foreningen' 'kita_membership' %}
-{% endblock %}
-
-{% block contenthead %}Dit medlemskab af foreningen{% endblock %}
+{% block contenthead %}Kontingent{% endblock %}
 
 {% block content %}
 
@@ -33,5 +28,22 @@
 
 <p>Du skal være medlem af foreningen for at kunne deltage i vores arrangementer. Hvis andet ikke er anført så vil det være muligt at betale kontingent til selve arrangementet.</p>
 {% endifequal %}
+
+{% if backlog %}
+
+    <h2>Betalinger</h2>
+
+    <table class="table">
+    {% for membership in backlog %}
+
+        <tr>
+            <td>{{ membership.attendee.event }} ({{ membership.bind_date }})</td>
+            <td>{{ membership.membership_type|translate:"payment_type" }}</td>
+        </tr>
+
+    {% endfor %}
+    </table>
+
+{% endif %}
 
 {% endblock %}

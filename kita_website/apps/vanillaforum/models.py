@@ -2,11 +2,10 @@ import MySQLdb
 import hashlib
 
 from django.conf import settings
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
 
 from selvbetjening.core.members.signals import user_created
 from selvbetjening.core.members.signals import user_changed_password, user_changed_username
+
 
 class VanillaForum:
 
@@ -100,9 +99,13 @@ class VanillaForum:
         else:
             return 0
 
+
 # listen for new users
 def new_user_listner(sender, **kwargs):
     instance = kwargs['instance']
+
+    if getattr(settings, 'FORUM_DATABASE_DISABLED', False):
+        return
 
     vanilla_forum = VanillaForum()
     vanilla_forum.createUser(instance.username,
@@ -113,19 +116,27 @@ def new_user_listner(sender, **kwargs):
 
 user_created.connect(new_user_listner)
 
+
 # listen for users changing their password
 def change_user_password_listner(sender, **kwargs):
     instance = kwargs['instance']
+
+    if getattr(settings, 'FORUM_DATABASE_DISABLED', False):
+        return
 
     vanilla_forum = VanillaForum()
     vanilla_forum.changeUserPassword(instance.username, kwargs['clear_text_password'])
 
 user_changed_password.connect(change_user_password_listner)
 
+
 # listen for user changing their username
 def change_user_username_listener(sender, **kwargs):
     old_username = kwargs['old_username']
     new_username = kwargs['new_username']
+
+    if getattr(settings, 'FORUM_DATABASE_DISABLED', False):
+        return
 
     vanilla_forum = VanillaForum()
     vanilla_forum.changeUserUsername(old_username, new_username)

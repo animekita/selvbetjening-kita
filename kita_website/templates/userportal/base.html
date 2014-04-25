@@ -1,0 +1,43 @@
+{% extends "selvbetjening/sitebase.html" %}
+
+{% block outercontent %}
+
+    <div id="midLeft">
+        {% block navigation %}
+
+            {% if request.user.is_authenticated %}
+                <h2>Din bruger</h2>
+                <ul class="leftNav">
+                    <li><a href="{% url "userportal_profile" %}">Se profil</a></li>
+                    <li><a href="{% url "kita_membership" %}">Kontingent</a></li>
+                </ul>
+
+                <h2>Opdater</h2>
+                <ul class="leftNav">
+                    <li><a href="{% url "userportal_edit_profile" %}">Personoplysninger</a></li>
+                    <li><a href="{% url "userportal_edit_privacy" %}">Privacy</a></li>
+                    <li><a href="{% url "userportal_edit_picture" %}">Billede</a></li>
+                    <li><a href="{% url "userportal_edit_username" %}">Brugernavn</a></li>
+                    <li><a href="{% url "userportal_edit_password" %}">Kodeord</a></li>
+                </ul>
+
+            {% else %}
+
+            {% endif %}
+
+
+
+        {% endblock %}
+
+        <div id="kitaKanji"></div>
+    </div>
+
+    <div id="midContent">
+        <h1 class="title">{% block contenthead %}{% endblock %}</h1>
+
+        {% include "base/parts/messages.html" %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+{% endblock %}

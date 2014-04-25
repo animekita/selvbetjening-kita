@@ -1,0 +1,91 @@
+{% load copyright %}{% load googleanalytics %}<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Anime kita - nordjyllands forening for japansk populærkultur</title>
+
+        <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/cms.css" />
+
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}contrib/bootstrap-3.1/css/bootstrap.min.css" media="screen, projection" />
+
+        <script src="{{ STATIC_URL }}contrib/jquery-2.1/jquery-2.1.0.min.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}contrib/bootstrap-3.1/js/bootstrap.min.js" type="text/javascript"></script>
+
+        {% block extrastyle %}{% endblock %}
+
+        <script type="text/javascript">
+            $(function() {
+                $('input.dateinput').each(function(index, element) {
+                    $(element).datepicker({
+                        format: 'dd.mm.yyyy'
+                    });
+                });
+            });
+        </script>
+    </head>
+
+<body>
+	<div id="wrapper">
+		<div id="topNavBg"></div>
+		<div id="top">
+			<a href="http://www.anime-kita.dk"><img id="topLogo" src="{{ STATIC_URL }}graphics/toplogo.png" alt="Anime Kita logo" /></a>
+			<div id="topNavBgFade"></div>
+			<ul id="topNav">
+				<li><a href="http://www.anime-kita.dk/">home</a></li>
+				<li><a href="http://www.anime-kita.dk/forum/">forum</a></li>
+				<li><a href="http://www.anime-kita.dk/galleri/">galleri</a></li>
+				<li><a href="http://www.anime-kita.dk/selvbetjening/" class="current">tilmelding</a></li>
+			</ul>
+
+			<div id="topUserNav">
+				<!-- This is why whitespaces inside block elements shouldn't be parsed -->
+				{% if request.user.is_authenticated %}
+				<a class="floatLeft" href="{% url "userportal_profile" %}">{{ request.user.username }}</a
+				><span class="vertSeperatorTiny">|</span
+				><a href="{% url "auth_logout" %}">Log ud</a>
+				{% else %}
+				<a class="floatLeft" href="{% url "userportal_register" %}">Opret bruger</a
+				><span class="vertSeperatorTiny">|</span
+				><a href="{% url "auth_login" %}">Log ind</a>
+				{% endif %}
+			</div>
+
+		</div>
+
+		<div id="topContent">
+			<div id="pageControls"></div>
+		</div>
+
+		<div id="mid">
+
+            {% block outercontent %}
+                <div id="midContent" style="width: 800px;">
+                    <h1 class="title">{% block contenthead %}{% endblock %}</h1>
+
+                    {% include "base/parts/messages.html" %}
+
+                    {% block content %}{% endblock %}
+                </div>
+            {% endblock %}
+
+		</div>
+
+		<div id="footerFix"></div>
+	</div>
+
+	<div id="footer">
+		<!-- This is why ... -->
+		<span>Anime Kita, {% copyright_time 2007 %} &copy; All rights reserved</span
+		><span class="vertSeperatorMedium">|</span
+		><a href="http://www.anime-kita.dk/om-os/kontakt/">Kontakt</a
+		><span class="vertSeperatorMedium">|</span
+		><a href="http://www.anime-kita.dk/databehandlingspolitik/">Databehandlingspolitik</a>
+	</div>
+
+{% googleanalytics "UA-300839-6" %}
+</body>
+</html>

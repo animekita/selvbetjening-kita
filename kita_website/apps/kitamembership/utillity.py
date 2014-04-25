@@ -1,6 +1,8 @@
+from datetime import datetime
 from django.contrib.auth.models import User
 
 from kita_website.apps.kitamembership.models import Membership, MembershipState
+
 
 def get_membership_statistics(max_age_inclusive=None):
     active = 0
@@ -15,7 +17,7 @@ def get_membership_statistics(max_age_inclusive=None):
            profile.get_age() > max_age_inclusive:
             continue
 
-        state = Membership.objects.get_membership_state(user)
+        state = Membership.objects.get_membership_state(user, datetime.today())
 
         if state == MembershipState.ACTIVE:
             active += 1

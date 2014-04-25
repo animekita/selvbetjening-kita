@@ -31,7 +31,7 @@ class Command(BaseCommand):
         fp.write(u'=============\n')
 
         for user in User.objects.all():
-            state = Membership.objects.get_membership_state(user, at_date=at_date)
+            state = Membership.objects.get_membership_state(user, at_date)
 
             if state != MembershipState.INACTIVE and state != MembershipState.PASSIVE:
                 profile = get_or_create_profile(user)

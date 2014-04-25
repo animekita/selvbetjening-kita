@@ -1,0 +1,14 @@
+{% extends "selvbetjening/sitebase.html" %}
+{% load crispy_forms_tags %}
+
+{% block contenthead %}Opret bruger{% endblock %}
+
+{% block content %}
+
+    <p>En bruger her vil give dig adgang til en masse nyheder fra Anime Kita. Du vil kunne <b>deltage i diskussioner på vores forum</b>, samt <b>tilmelde dig vores arrangementer</b> via vores hjemmeside.</p>
+
+    <p>Du kan læse mere <a href="http://www.anime-kita.dk/databehandlingspolitik/">her</a> om hvordan vi behandler de oplysninger du vidergiver til os.</p>
+
+    {% crispy form %}
+
+{% endblock %}
