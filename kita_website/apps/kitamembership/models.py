@@ -247,7 +247,7 @@ class Membership(models.Model):
 
     @property
     def price(self):
-        return self.objects.get_membership_price(self.membership_type)
+        return Membership.objects.get_membership_price(self.membership_type)
 
     def __unicode__(self):
         return unicode(MembershipType.get_display_name(self.membership_type))
