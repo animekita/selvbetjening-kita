@@ -76,7 +76,7 @@ class Command(BaseCommand):
 
                     def print_memberships(ms):
                         for m in ms:
-                            fp.write('%s %s\n' % (m.bind_date.date(), MembershipType.get_display_name(m.membership_type)))
+                            fp.write('%s %s\n' % (m.bind_date, MembershipType.get_display_name(m.membership_type)))
 
                     if memberships[0].membership_type == 'SRATE':
                         print_memberships(memberships[:2])
