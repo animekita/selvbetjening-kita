@@ -1,0 +1,176 @@
+[
+    {
+      "pk": 1,
+      "model": "events.event",
+      "fields": {
+        "show_custom_signup_message": false,
+        "startdate": "2014-12-12",
+        "description": "Description 1",
+        "move_to_accepted_policy": "always",
+        "title": "Event 1",
+        "show_custom_change_message": false,
+        "registration_open": true,
+        "custom_status_page": "",
+        "custom_change_message": "",
+        "enddate": "2014-12-12",
+        "show_custom_status_page": false,
+        "custom_signup_message": ""
+      }
+    },
+    {
+      "pk": 2,
+      "model": "events.event",
+      "fields": {
+        "show_custom_signup_message": false,
+        "startdate": "2014-11-11",
+        "description": "Description 1",
+        "move_to_accepted_policy": "always",
+        "title": "Event 2",
+        "show_custom_change_message": false,
+        "registration_open": true,
+        "custom_status_page": "",
+        "custom_change_message": "",
+        "enddate": "2014-11-11",
+        "show_custom_status_page": false,
+        "custom_signup_message": ""
+      }
+    },
+    {
+        "pk": 1,
+        "model": "user.suser",
+        "fields": {
+            "username": "user1",
+            "password": "password"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "user.suser",
+        "fields": {
+            "username": "user2",
+            "password": "password"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "events.attend",
+        "fields": {
+            "event": 1,
+            "user": 1,
+            "state": "waiting",
+            "is_new": false,
+            "paid": 0,
+            "price": 0
+        }
+    },
+    {
+        "pk": 2,
+        "model": "events.attend",
+        "fields": {
+            "event": 1,
+            "user": 2,
+            "state": "waiting",
+            "is_new": false,
+            "paid": 0,
+            "price": 0
+        }
+    },
+    {
+        "pk": 3,
+        "model": "events.attend",
+        "fields": {
+            "event": 2,
+            "user": 2,
+            "state": "attended",
+            "is_new": false,
+            "paid": 100,
+            "price": 100
+        }
+    },
+    {
+        "pk": 1,
+        "model": "events.optionGroup",
+        "fields": {
+            "event": 1,
+            "name": "",
+            "description": "",
+            "order": 0,
+            "minimum_selected": 0,
+            "maximum_selected": 0,
+            "package_price": 0,
+            "is_special": false
+        }
+    },
+    {
+        "pk": 2,
+        "model": "events.optionGroup",
+        "fields": {
+            "event": 1,
+            "name": "",
+            "description": "",
+            "order": 1,
+            "minimum_selected": 0,
+            "maximum_selected": 0,
+            "package_price": 0,
+            "is_special": false
+        }
+    },
+    {
+        "pk": 1,
+        "model": "events.option",
+        "fields": {
+            "group": 1,
+            "name": "option 1",
+            "description": "",
+            "order": 0,
+            "type": "kitamembership",
+            "required": false,
+
+            "in_scope_view_registration": true,
+            "in_scope_view_manage": true,
+            "in_scope_view_user_invoice": true,
+            "in_scope_view_system_invoice": true,
+
+            "in_scope_edit_registration": true,
+            "in_scope_edit_manage_waiting": true,
+            "in_scope_edit_manage_accepted": true,
+            "in_scope_edit_manage_attended": true,
+
+            "price": 0
+        }
+    },
+    {
+        "pk": 2,
+        "model": "events.option",
+        "fields": {
+            "group": 2,
+            "name": "option 2",
+            "description": "",
+            "order": 5,
+            "type": "kitamembership",
+            "required": true,
+
+            "in_scope_view_registration": true,
+            "in_scope_view_manage": true,
+            "in_scope_view_user_invoice": true,
+            "in_scope_view_system_invoice": true,
+
+            "in_scope_edit_registration": true,
+            "in_scope_edit_manage_waiting": true,
+            "in_scope_edit_manage_accepted": true,
+            "in_scope_edit_manage_attended": true,
+
+            "price": 0
+        }
+    },
+    {
+        "pk": 1,
+        "model": "kitamembership.membership",
+         "fields": {
+             "user": "2",
+             "attendee": "3",
+             "bind_date": "2014-11-11",
+             "membership_type": "FULL"
+         }
+    }
+]
