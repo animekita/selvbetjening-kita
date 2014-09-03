@@ -77,7 +77,8 @@ class VanillaForum:
         cursor.close()
 
     def changeUserPassword(self, username, password):
-        passwd = hashlib.md5(password.encode('utf-8'))
+        passwd = hashlib.md5(password)
+        #passwd = hashlib.md5(password.encode('utf-8'))
 
         cursor = self.db.cursor()
         cursor.execute("UPDATE LUM_User SET Password=%s WHERE Name=%s", (passwd.hexdigest(), username))
