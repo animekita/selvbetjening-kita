@@ -1,6 +1,6 @@
 # ==encoding: utf-8 ==
 
-from datetime import date
+from datetime import date, timedelta
 import codecs
 
 from django.core.management.base import BaseCommand, CommandError
@@ -12,15 +12,21 @@ class Command(BaseCommand):
     args = '<year>'
     help = 'Generates a yearly report for all membership activity'
 
-    def handle(self, *args, **options):
-        members = {}
-        at_date = date(2013, 12, 31)
-        bf_date = date(2012, 12, 31)
+    def handle(self, year, *args, **options):
 
-        fp = codecs.open("report.txt", "w", "utf-8")
+        members = {}
+
+        if year == 'now':
+            at_date = date.today()
+            bf_date = at_date - timedelta(days=356)
+        else:
+            at_date = date(int(year), 12, 31)
+            bf_date = date(int(year)-1, 12, 31)
+
+        fp = codecs.open("report-%s.txt" % year, "w", "utf-8")
 
         membership_income = 0
-        for membership in Membership.objects.filter(bind_date__lt=at_date).filter(bind_date__gt=bf_date):
+        for membership in Membership.objects.filter(bind_date__lt=at_date).filter(bind_date__gt=bf_date).select_related():
             if membership.attendee.is_paid():
                 membership_income += membership.price
 
@@ -29,11 +35,7 @@ class Command(BaseCommand):
         fp.write(u'=============\n')
 
         for user in SUser.objects.all():
-            try:
-                state = Membership.objects.get_membership_state(user, at_date)
-            except:
-                print 'Error handling %s' % user.username
-                continue
+            state = Membership.objects.get_membership_state(user, at_date)
 
             if state != MembershipState.INACTIVE and state != MembershipState.PASSIVE:
                 age = user.get_age()

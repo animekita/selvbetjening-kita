@@ -110,7 +110,10 @@ class MembershipManager(models.Manager):
             return MembershipState.INACTIVE
 
         if memberships[0].membership_type == 'SRATE':
-            last = memberships[1]
+            if len(memberships) > 1:
+                last = memberships[1]
+            else:
+                return MembershipState.INACTIVE
         else:
             last = memberships[0]
 
