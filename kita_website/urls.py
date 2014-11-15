@@ -27,8 +27,9 @@ urlpatterns = patterns('',
     # /api/
 
     (r'^api/rest/', include('selvbetjening.api.rest.urls')),
-    (r'^api/sso/', include('selvbetjening.api.sso.urls'))
-
+    (r'^api/sso/', include('selvbetjening.api.sso.urls')),
+    (r'^api/jsconnect/', include('pyjsconnect.django.urls'))
+                       
 )
 
 if getattr(settings, 'STATIC_DEBUG', False):
