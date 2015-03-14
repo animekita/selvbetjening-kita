@@ -17,12 +17,6 @@
 <p>Du betalte første halvdel af dit kontingent den {{membership_date.date|date:"d/m Y"}} og dit kontingent gælder indtil den {{membership_to|date:"d/m Y"}}.</p>
 {% endifequal %}
 
-{% ifequal membership_status "PASSIVE" %}
-<p>Du er <b>passivt medlem</b> af Anime Kita, hvilket betyder at du ikke har fornyet dit kontingent efter det er udløbet og derfor skal betale kontingent igen til det næste arrangement du deltager i. Du vil dog stadig blive regnet som medlem af foreningen i vores statistikker.</p>
-
-<p>Du vil være passivt medlem indtil den {{membership_passive_to|date:"d/m Y"}} hvor du ikke længere vil blive betegnet som medlem af foreningen.</p>
-{% endifequal %}
-
 {% ifequal membership_status "INACTIVE" %}
 <p>Du er <b>ikke medlem</b> af Anime Kita, hvilket skyldes at du ikke har betalt kontingent til foreningen.</p>
 

@@ -7,7 +7,6 @@ from kita_website.apps.kitamembership.models import Membership, MembershipState
 def get_membership_statistics(max_age_inclusive=None):
     active = 0
     conditional_active = 0
-    passive = 0
     inactive = 0
 
     for user in User.objects.all():
@@ -23,13 +22,10 @@ def get_membership_statistics(max_age_inclusive=None):
             active += 1
         elif state == MembershipState.CONDITIONAL_ACTIVE:
             conditional_active += 1
-        elif state == MembershipState.PASSIVE:
-            passive += 1
         else:
             inactive += 1
 
     return {'active': active,
-            'conditional_active' : conditional_active,
-            'passive' : passive,
+            'conditional_active': conditional_active,
             'inactive': inactive,
-            'total' : active + conditional_active + passive}
+            'total': active + conditional_active}

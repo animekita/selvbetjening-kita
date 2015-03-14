@@ -31,7 +31,6 @@ class MembershipModelTestCase(TestCase):
     def setUp(self):
 
         self.date_inactive = datetime(datetime.now().year - 2, datetime.now().month, datetime.now().day)
-        self.date_passive = datetime(datetime.now().year - 1, datetime.now().month, datetime.now().day)
         self.date_active = datetime.now() - timedelta(days=5)
 
     def test_no_payments(self):
@@ -42,21 +41,15 @@ class MembershipModelTestCase(TestCase):
 
     def test_full_payment_inactive(self):
         user = Database.new_user()
-
-        self.assertEqual(MembershipState.INACTIVE,
-                         Membership.objects.get_membership_state(user, datetime.today()))
-
-    def test_full_payment_passive(self):
-        user = Database.new_user()
-        event = EventDatabase.new_event(start_date=self.date_passive)
+        event = EventDatabase.new_event(start_date=self.date_inactive)
         attendee = EventDatabase.attend(user, event)
 
         Membership.objects.create(user=user,
                                   attendee=attendee,
-                                  bind_date=self.date_passive,
+                                  bind_date=self.date_inactive,
                                   membership_type=MembershipType.FULL)
 
-        self.assertEqual(MembershipState.PASSIVE,
+        self.assertEqual(MembershipState.INACTIVE,
                          Membership.objects.get_membership_state(user, datetime.today()))
 
     def test_full_payment_active(self):
@@ -74,6 +67,53 @@ class MembershipModelTestCase(TestCase):
 
         self.assertNotEqual(Membership.objects.member_since(user), None)
 
+    def test_rate_payment_active(self):
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_active)
+        attendee = EventDatabase.attend(user, event)
+
+        Membership.objects.create(user=user,
+                                  attendee=attendee,
+                                  bind_date=self.date_active,
+                                  membership_type=MembershipType.RATE)
+
+        self.assertEqual(MembershipState.ACTIVE,
+                         Membership.objects.get_membership_state(user, datetime.today()))
+
+        self.assertNotEqual(Membership.objects.member_since(user), None)
+
+    def test_pass_payment_not_active(self):
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_active)
+        attendee = EventDatabase.attend(user, event)
+
+        Membership.objects.create(user=user,
+                                  attendee=attendee,
+                                  bind_date=self.date_active,
+                                  membership_type=MembershipType.PASS)
+
+        self.assertEqual(MembershipState.INACTIVE,
+                         Membership.objects.get_membership_state(user, datetime.today()))
+
+        self.assertEqual(Membership.objects.member_since(user), None)
+
+    def test_pass_payment_active_at_the_relevant_event(self):
+
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_active)
+        attendee = EventDatabase.attend(user, event)
+
+        Membership.objects.create(user=user,
+                                  attendee=attendee,
+                                  bind_date=self.date_active,
+                                  membership_type=MembershipType.PASS)
+
+        self.assertEqual(MembershipState.ACTIVE,
+                         Membership.objects.get_membership_state(user, self.date_active,
+                                                                 fake_upgrade_attendance_as_full=attendee))
+
+        self.assertEqual(Membership.objects.member_since(user), None)
+
     def test_frate_payment_inactive(self):
         user = Database.new_user()
         event = EventDatabase.new_event(start_date=self.date_inactive)
@@ -85,19 +125,6 @@ class MembershipModelTestCase(TestCase):
                                   membership_type=MembershipType.FRATE)
 
         self.assertEqual(MembershipState.INACTIVE,
-                         Membership.objects.get_membership_state(user, datetime.today()))
-
-    def test_frate_payment_passive(self):
-        user = Database.new_user()
-        event = EventDatabase.new_event(start_date=self.date_passive)
-        attendee = EventDatabase.attend(user, event)
-
-        Membership.objects.create(user=user,
-                                  attendee=attendee,
-                                  bind_date=self.date_passive,
-                                  membership_type=MembershipType.FRATE)
-
-        self.assertEqual(MembershipState.PASSIVE,
                          Membership.objects.get_membership_state(user, datetime.today()))
 
     def test_frate_payment_condactive(self):
@@ -134,27 +161,6 @@ class MembershipModelTestCase(TestCase):
         self.assertEqual(MembershipState.INACTIVE,
                          Membership.objects.get_membership_state(user, datetime.today()))
 
-    def test_srate_payment_passive(self):
-        user = Database.new_user()
-        event = EventDatabase.new_event(start_date=self.date_passive)
-        attendee = EventDatabase.attend(user, event)
-
-        Membership.objects.create(user=user,
-                                  attendee=attendee,
-                                  bind_date=self.date_passive,
-                                  membership_type=MembershipType.FRATE)
-
-        event = EventDatabase.new_event(start_date=self.date_passive + timedelta(days=1))
-        attendee = EventDatabase.attend(user, event)
-
-        Membership.objects.create(user=user,
-                                  attendee=attendee,
-                                  bind_date=self.date_passive + timedelta(days=1),
-                                  membership_type=MembershipType.SRATE)
-
-        self.assertEqual(MembershipState.PASSIVE,
-                         Membership.objects.get_membership_state(user, datetime.today()))
-
     def test_srate_payment_active(self):
         user = Database.new_user()
         event = EventDatabase.new_event(start_date=self.date_active)
@@ -175,6 +181,55 @@ class MembershipModelTestCase(TestCase):
 
         self.assertEqual(MembershipState.ACTIVE,
                          Membership.objects.get_membership_state(user, datetime.today()))
+
+    def test_get_expected_choices_for_active_members(self):
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_active)
+        attendee = EventDatabase.attend(user, event)
+
+        event2 = EventDatabase.new_event(start_date=self.date_active + timedelta(days=1))
+
+        Membership.objects.create(user=user,
+                                  attendee=attendee,
+                                  bind_date=self.date_active,
+                                  membership_type=MembershipType.RATE)
+
+        assert Membership.objects.get_membership_choices(user, event2) == []
+
+    def test_get_expected_choices_for_inactive_but_existing_member(self):
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_inactive)
+        attendee = EventDatabase.attend(user, event)
+
+        Membership.objects.create(user=user,
+                                  attendee=attendee,
+                                  bind_date=self.date_inactive,
+                                  membership_type=MembershipType.RATE)
+
+        event2 = EventDatabase.new_event(start_date=self.date_active)
+
+        assert Membership.objects.get_membership_state(user, self.date_active) == MembershipState.INACTIVE
+
+        choices = Membership.objects.get_membership_choices(user, event2)
+        assert len(choices) == 1
+        assert MembershipType.RATE in choices
+
+    def test_get_expected_choices_for_inactive_and_new_member(self):
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_inactive)
+
+        choices = Membership.objects.get_membership_choices(user, event)
+        assert len(choices) == 2
+        assert MembershipType.RATE in choices
+        assert MembershipType.PASS in choices
+
+    def test_get_expected_choices_for_inactive_and_new_member_skip_pass(self):
+        user = Database.new_user()
+        event = EventDatabase.new_event(start_date=self.date_inactive)
+
+        choices = Membership.objects.get_membership_choices(user, event, allow_pass=False)
+        assert len(choices) == 1
+        assert MembershipType.RATE in choices
 
 
 class MembershipWidgetTestCase(TestCase):

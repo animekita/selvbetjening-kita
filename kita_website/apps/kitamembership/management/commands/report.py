@@ -37,7 +37,7 @@ class Command(BaseCommand):
         for user in SUser.objects.all():
             state = Membership.objects.get_membership_state(user, at_date)
 
-            if state != MembershipState.INACTIVE and state != MembershipState.PASSIVE:
+            if state != MembershipState.INACTIVE:
                 age = user.get_age()
                 members[age] = members.get(age, [])
                 members[age].append((user, state))
