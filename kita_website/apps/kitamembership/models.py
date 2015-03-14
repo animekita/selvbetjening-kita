@@ -342,7 +342,7 @@ class MembershipChoiceWidget(ChoiceWidget):
 
     def update_choices(self, user, attendee):
 
-        membership_choices = self._get_choices(user, self.option.groupp.event)
+        membership_choices = self._get_choices(user, self.option.group.event)
         price_label_pairs = [(Membership.objects.get_membership_price(choice), MembershipType.get_display_name(choice))
                              for choice in membership_choices]
 
