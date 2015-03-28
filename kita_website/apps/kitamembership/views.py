@@ -53,16 +53,19 @@ def sadmin2_membership_report(request):
     # TODO add selector
 
     def parse_date(input):
-        match = re.match('([0-9]+)/([0-9]+)/([0-9]+)', input)
+        try:
+            match = re.match('([0-9]+)/([0-9]+)/([0-9]+)', input)
 
-        month = match.group(1)
-        day = match.group(2)
-        year = match.group(3)
+            month = match.group(1)
+            day = match.group(2)
+            year = match.group(3)
 
-        return date(int(year), int(month), int(day))
+            return date(int(year), int(month), int(day))
+        except:
+            return date.today()
 
-    at_date = parse_date(request.GET.get('to'))
-    bf_date = parse_date(request.GET.get('from'))
+    at_date = parse_date(request.GET.get('to')) if request.GET.get('to', None) else date.today()
+    bf_date = parse_date(request.GET.get('from')) if request.GET.get('from', None) else date.today() - timedelta(days=356)
 
     full = request.GET.get('full', 'on') == 'on'
 
