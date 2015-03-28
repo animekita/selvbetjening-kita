@@ -96,8 +96,7 @@ class MembershipManager(models.Manager):
     def get_recent_memberships(self, user, at_date, fake_attendance_paid=None):
 
         memberships = []
-        for membership in Membership.objects\
-                .filter(user=user)\
+        for membership in user.membership_set\
                 .filter(bind_date__lte=at_date)\
                 .order_by('-bind_date')\
                 .select_related():
@@ -414,8 +413,21 @@ menu.sadmin2_menu_tab_user.append({
     'url_callback': menu.url_callback('kita_membership_sadmin2', ('user_pk', ))
 })
 
+menu.sadmin2_menu_tab_users[1]['dropdown'] = list(menu.sadmin2_menu_tab_users[1]['dropdown'])
+menu.sadmin2_menu_tab_users[1]['dropdown'].append({
+    'id': 'membership',
+    'name': _('Membership'),
+    'url_callback': menu.url_callback('kita_membership_report_sadmin2', [])
+})
+
 menu.breadcrumbs['user_membership'] = {
     'name': _('Membership'),
     'url_callback': menu.url_callback('kita_membership_sadmin2', ('user_pk',)),
     'parent': 'user'
+}
+
+menu.breadcrumbs['user_membershipreport'] = {
+    'name': _('Membership'),
+    'url_callback': menu.url_callback('kita_membership_report_sadmin2', []),
+    'parent': 'users_reports'
 }

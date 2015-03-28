@@ -38,6 +38,9 @@ urlpatterns = patterns('',
 
     # /sadmin2/
 
+    url(r'^sadmin2/users/reports/membership/$',
+        'kita_website.apps.kitamembership.views.sadmin2_membership_report',
+        name='kita_membership_report_sadmin2'),
     url(r'^sadmin2/users/(?P<user_pk>[0-9a-zA-Z_\-]+)/membership/$',
         'kita_website.apps.kitamembership.views.sadmin2_membershipstatus',
         name='kita_membership_sadmin2'),

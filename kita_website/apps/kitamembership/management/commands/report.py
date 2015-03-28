@@ -8,6 +8,7 @@ from django.core.management.base import BaseCommand, CommandError
 from kita_website.apps.kitamembership.models import Membership, MembershipState, MembershipType
 from selvbetjening.core.user.models import SUser
 
+
 class Command(BaseCommand):
     args = '<year>'
     help = 'Generates a yearly report for all membership activity'

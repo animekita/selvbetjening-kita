@@ -1,0 +1,88 @@
+{% extends "sadmin2/site.html" %}
+{% load crispy_forms_tags %}
+{% load kitamembership_translate %}
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link href="{% static "kitamembership/css/datepicker.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="row hidden-print">
+<div class="col-lg-12">
+<form method="GET" class="form-inline">
+
+  <div class="form-group">
+    <label for="date-from">Fra (efter)</label>
+      <input id="date-from" name="from" type="text" class="form-control datepicker" value="03/24/2014">
+  </div>
+  <div class="form-group">
+    <label for="date-to">Til (og med)</label>
+      <input id="date-to" name="to" type="text" class="form-control datepicker" value="03/24/2015">
+  </div>
+    <div class="checkbox">
+    <label>
+      <input type="checkbox" name="full"> Vis medlemmer uden medlemskabsbetaling i perioden
+    </label>
+  </div>
+  <button type="submit" class="btn btn-primary">Vis</button>
+
+</form>
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-12">
+    <h2>Kontingent {{ bf_date }}&mdash;{{ at_date }}</h2>
+    <p>Total kontingent betaling i perioden: <u>{{ total_income }}  DKK</u></p>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Brugernavn</th>
+            <th>Navn</th>
+            <th>Fødselsdag</th>
+            <th>Adresse</th>
+            <th>Medlemskab</th>
+        </tr>
+
+        {% for range_age_start, range_age_end, entries in report  %}
+            <tr>
+                <th colspan="5">Alder {{ range_age_start }}&dash;{{ range_age_end }}</th>
+            </tr>
+            {% for user, state, memberships in entries %}
+                <tr>
+                    <td rowspan="2"><a href="{% url "sadmin2:user" user_pk=user.pk %}">{{ user.username }}</a></td>
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <td>{{ user.dateofbirth }}</td>
+                    <td>{{ user.street }} {{ user.city }} {{ user.postalcode }}</td>
+                    <td><a href="{% url "kita_membership_sadmin2" user_pk=user.pk %}">{{ state|translate:"membership_state" }}</a></td>
+                </tr>
+
+                <tr><td colspan="4">
+
+                    <table class="table table-hover table-condensed table-striped" style="font-size: 0.8em">
+                        {% for membership in memberships %}
+                        <tr>
+                            <td style="width: 30%">{{ membership.membership_type }}</td>
+                            <td style="width: 30%">{{ membership.bind_date }}</td>
+                            <td style="width: 40%"><a href="{% url "sadmin2:event_attendee" event_pk=membership.attendee.event.pk attendee_pk=membership.attendee.pk %}">{{ membership.attendee.event }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td></tr>
+
+            {% endfor %}
+        {% endfor %}
+    </table>
+
+    <script src="{% static "kitamembership/js/bootstrap-datepicker.js" %}"></script>
+    <script>
+        $('.datepicker').datepicker();
+    </script>
+
+</div>
+</div>
+
+{% endblock %}
