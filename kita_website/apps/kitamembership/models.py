@@ -20,6 +20,7 @@ from selvbetjening.sadmin2.options.stypemanager import SBaseTypeManager
 
 MEMBERSHIP_OPTION_TYPE_ID = 'kitamembership'
 MEMBERSHIP_NOPASS_OPTION_TYPE_ID = 'kitamembershipnopass'
+MEMBERSHIP_OPTION_TYPE_IDS = (MEMBERSHIP_OPTION_TYPE_ID, MEMBERSHIP_NOPASS_OPTION_TYPE_ID)
 
 
 class MembershipState(object):
@@ -287,7 +288,7 @@ class Membership(models.Model):
 def selection_delete_handler(sender, **kwargs):
     instance = kwargs['instance']
 
-    if instance.option.type == MEMBERSHIP_OPTION_TYPE_ID:
+    if instance.option.type in MEMBERSHIP_OPTION_TYPE_IDS:
         Membership.objects.filter(attendee=instance.attendee).delete()
 
 
@@ -295,7 +296,7 @@ def selection_delete_handler(sender, **kwargs):
 def selection_save_handler(sender, **kwargs):
     instance = kwargs['instance']
 
-    if instance.option.type == MEMBERSHIP_OPTION_TYPE_ID:
+    if instance.option.type in MEMBERSHIP_OPTION_TYPE_IDS:
 
         membership_type = MembershipType.reverse(instance.suboption.name)
 

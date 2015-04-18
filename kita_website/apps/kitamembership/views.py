@@ -50,8 +50,6 @@ def sadmin2_membershipstatus(request, user_pk):
 @sadmin_prerequisites
 def sadmin2_membership_report(request):
 
-    # TODO add selector
-
     def parse_date(input):
         try:
             match = re.match('([0-9]+)/([0-9]+)/([0-9]+)', input)
