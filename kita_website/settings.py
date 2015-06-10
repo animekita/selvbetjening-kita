@@ -21,6 +21,7 @@ TEMPLATE_DIRS = [
 # installed applications
 
 INSTALLED_APPS.extend([
+    'captcha',
     'selvbetjening.frontend.base',
     'selvbetjening.frontend.auth',
     'selvbetjening.frontend.userportal',

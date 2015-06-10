@@ -1,1 +1,3 @@
 -e git://github.com/bryanchow/python-jsconnect.git#egg=jsconnect
+
+django-recaptcha==1.0.4

@@ -2,6 +2,7 @@ from django.conf.urls import *
 from django.conf import settings
 
 from selvbetjening.frontend.userportal import views as userportal_views
+from kita_website.apps.kitamembership.forms import CaptchaUserRegistrationForm
 
 urlpatterns = patterns('',
 
@@ -15,7 +16,8 @@ urlpatterns = patterns('',
     url(r'^profil/registration/$', userportal_views.register,
          kwargs={
              'login_on_success': True,
-             'success_page': 'userportal_profile'
+             'success_page': 'userportal_profile',
+             'form_class': CaptchaUserRegistrationForm
          },
          name='userportal_register'),
     url(r'^profil/update/$', userportal_views.edit_profile,
